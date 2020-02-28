@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class SignupPage extends StatelessWidget {
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Página de Cadastro'),
+        title: Text('Página Inicial'),
       ),
       body: _body(),
     );
@@ -13,7 +13,7 @@ class SignupPage extends StatelessWidget {
 
   _body() {
     return Center(
-      child: Text('Página de Cadastro'),
+      child: Text('Página Inicial'),
     );
   }
 }

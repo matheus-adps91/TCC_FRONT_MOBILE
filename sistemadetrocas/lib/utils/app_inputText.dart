@@ -27,6 +27,9 @@ class AppInputText extends StatelessWidget {
       obscureText: password,
       validator: validator,
       decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
         labelText: textTitle,
         labelStyle: TextStyle(fontSize: 26),
         hintText: textHint,

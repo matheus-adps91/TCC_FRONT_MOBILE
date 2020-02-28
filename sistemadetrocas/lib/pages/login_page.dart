@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:sistemadetrocas/pages/app_button.dart';
-import 'package:sistemadetrocas/pages/app_inputText.dart';
+import 'package:sistemadetrocas/model/usuario.dart';
+import 'package:sistemadetrocas/pages/api_response.dart';
+import 'package:sistemadetrocas/pages/home_page.dart';
+import 'package:sistemadetrocas/pages/login_api.dart';
+import 'package:sistemadetrocas/utils/app_button.dart';
+import 'package:sistemadetrocas/utils/app_inputText.dart';
+import 'package:sistemadetrocas/utils/nav.dart';
 
 class LoginPage extends StatelessWidget {
   // Fields
@@ -15,11 +20,11 @@ class LoginPage extends StatelessWidget {
       appBar: AppBar(
         title: Text("Sistema de Trocas"),
       ),
-      body: _body(),
+      body: _body(context),
     );
   }
 
-  _body() {
+  _body(BuildContext context) {
     return Form(
       key: _formKey,
       child: Container(
@@ -29,7 +34,7 @@ class LoginPage extends StatelessWidget {
           children: <Widget>[
             AppInputText(
               "Login",
-              "Formato: usuário@provedor.com",
+              "usuario@provedor.com",
               TextInputType.emailAddress,
               _tLogin,
               validator: _validateLogin,
@@ -37,14 +42,15 @@ class LoginPage extends StatelessWidget {
             SizedBox(height: 25),
             AppInputText(
               "Senha",
-              "A senha deve conter no mínimo 6 caracteres",
+              "Senha de no mínimo 6 caracteres",
               TextInputType.text,
               _tSenha,
               password: true,
               validator: _validateSenha,
             ),
             SizedBox(height: 25),
-            AppButton('Login', Colors.white, 22, Colors.blue, _onClickLogin),
+            AppButton('Login', Colors.white, 22, Colors.blue,
+                () => _onClickLogin(context)),
             SizedBox(height: 15),
             AppButton('Nova Conta', Colors.blue, 22, Colors.white,
                 _onClickNewAccount),
@@ -56,7 +62,7 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  _onClickLogin() {
+  void _onClickLogin(BuildContext context) async {
     final String login = _tLogin.text;
     final String senha = _tSenha.text;
 
@@ -64,6 +70,14 @@ class LoginPage extends StatelessWidget {
 
     if (!formRespValidation) {
       return;
+    }
+
+    ApiResponse apiResponse = await LoginAPI.login(login, senha);
+
+    if (apiResponse.userAuthenticated) {
+      Usuario usuarioResp = apiResponse.result;
+      print(">>> $usuarioResp");
+      push(context, HomePage());
     }
   }
 
@@ -85,11 +99,8 @@ class LoginPage extends StatelessWidget {
     if (value.isEmpty) {
       return "Senha não pode estar em branco";
     }
-    if (value.length < 6) {
+    if (value.length < 1) {
       return "Senha deve conter pelo menos 6 caracteres";
-    }
-    if (value.contains(RegExp(r"(\w+)"))) {
-      return "Senha deve conster letras e números";
     }
     return null;
   }
