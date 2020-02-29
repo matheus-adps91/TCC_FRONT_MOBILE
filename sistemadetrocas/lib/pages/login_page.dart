@@ -3,6 +3,7 @@ import 'package:sistemadetrocas/model/usuario.dart';
 import 'package:sistemadetrocas/pages/api_response.dart';
 import 'package:sistemadetrocas/pages/home_page.dart';
 import 'package:sistemadetrocas/pages/login_api.dart';
+import 'package:sistemadetrocas/pages/signup_page.dart';
 import 'package:sistemadetrocas/utils/app_button.dart';
 import 'package:sistemadetrocas/utils/app_inputText.dart';
 import 'package:sistemadetrocas/utils/nav.dart';
@@ -52,10 +53,13 @@ class LoginPage extends StatelessWidget {
             AppButton('Login', Colors.white, 22, Colors.blue,
                 () => _onClickLogin(context)),
             SizedBox(height: 15),
-            AppButton('Nova Conta', Colors.blue, 22, Colors.white,
-                _onClickNewAccount),
+            AppButton('Recuperar Senha', Colors.blue, 20, Colors.white,
+                _onClickNewPassword),
             SizedBox(height: 15),
-            AppButton('Sair', Colors.white, 22, Colors.blue, _onClickExit),
+            AppButton('Nova Conta', Colors.white, 22, Colors.blue,
+                () => _onClickNewAccount(context)),
+            SizedBox(height: 15),
+            AppButton('Sair', Colors.blue, 22, Colors.white, _onClickExit),
           ],
         ),
       ),
@@ -81,7 +85,11 @@ class LoginPage extends StatelessWidget {
     }
   }
 
-  _onClickNewAccount() {}
+  _onClickNewAccount(BuildContext context) {
+    push(context, SignupPage());
+  }
+
+  _onClickNewPassword() {}
 
   _onClickExit() {}
 
