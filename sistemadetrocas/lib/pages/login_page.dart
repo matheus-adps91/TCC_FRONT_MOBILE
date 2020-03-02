@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:sistemadetrocas/model/usuario.dart';
 import 'package:sistemadetrocas/pages/api_response.dart';
 import 'package:sistemadetrocas/pages/home_page.dart';
-import 'package:sistemadetrocas/pages/login_api.dart';
 import 'package:sistemadetrocas/pages/signup_page.dart';
+import 'package:sistemadetrocas/requests/login_api.dart';
 import 'package:sistemadetrocas/utils/app_button.dart';
 import 'package:sistemadetrocas/utils/app_inputText.dart';
 import 'package:sistemadetrocas/utils/nav.dart';
+import 'package:sistemadetrocas/utils/validation.dart';
 
 class LoginPage extends StatelessWidget {
   // Fields
@@ -33,22 +34,14 @@ class LoginPage extends StatelessWidget {
         padding: EdgeInsets.all(16),
         child: ListView(
           children: <Widget>[
-            AppInputText(
-              "Login",
-              "usuario@provedor.com",
-              TextInputType.emailAddress,
-              _tLogin,
-              validator: _validateLogin,
-            ),
+            AppInputText("Login", "usuario@provedor.com", _tLogin,
+                keyboardType: TextInputType.emailAddress,
+                validator: Validation.validateLogin),
             SizedBox(height: 25),
-            AppInputText(
-              "Senha",
-              "Senha de no mínimo 6 caracteres",
-              TextInputType.text,
-              _tSenha,
-              password: true,
-              validator: _validateSenha,
-            ),
+            AppInputText("Senha", "Senha de no mínimo 4 caracteres", _tSenha,
+                keyboardAction: TextInputAction.done,
+                password: true,
+                validator: Validation.validatePassword),
             SizedBox(height: 25),
             AppButton('Login', Colors.white, 22, Colors.blue,
                 () => _onClickLogin(context)),
@@ -92,24 +85,4 @@ class LoginPage extends StatelessWidget {
   _onClickNewPassword() {}
 
   _onClickExit() {}
-
-  String _validateLogin(String value) {
-    if (value.isEmpty) {
-      return "Login não pode estar em branco";
-    }
-    if (!value.contains('@')) {
-      return "Login inválido";
-    }
-    return null;
-  }
-
-  String _validateSenha(String value) {
-    if (value.isEmpty) {
-      return "Senha não pode estar em branco";
-    }
-    if (value.length < 1) {
-      return "Senha deve conter pelo menos 6 caracteres";
-    }
-    return null;
-  }
 }

@@ -5,6 +5,7 @@ class AppInputText extends StatelessWidget {
   String textTitle;
   String textHint;
   TextInputType keyboardType;
+  TextInputAction keyboardAction;
   TextEditingController controller;
   bool password;
   FormFieldValidator<String> validator;
@@ -13,8 +14,9 @@ class AppInputText extends StatelessWidget {
   AppInputText(
     this.textTitle,
     this.textHint,
-    this.keyboardType,
     this.controller, {
+    this.keyboardType = TextInputType.text,
+    this.keyboardAction = TextInputAction.next,
     this.password = false,
     this.validator,
   });
