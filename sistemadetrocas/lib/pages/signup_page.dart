@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sistemadetrocas/utils/app_formField.dart';
-import 'package:sistemadetrocas/utils/app_button.dart';
+import 'package:sistemadetrocas/pages/login_page.dart';
+import 'package:sistemadetrocas/requests/signup_api.dart';
+import 'package:sistemadetrocas/utils/composedWidgets/app_button.dart';
+import 'package:sistemadetrocas/utils/composedWidgets/app_formField.dart';
+import 'package:sistemadetrocas/utils/nav.dart';
 import 'package:sistemadetrocas/utils/validation.dart';
 
 enum GenderType {
@@ -15,6 +18,7 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   GenderType _genderSelected = GenderType.masculino;
+  bool _compliance = false;
   // Variável global para armazenar o estado da aplicação
   final _formSignUpkey = GlobalKey<FormState>();
   // Controllers para os campos do formulário
@@ -91,9 +95,11 @@ class _SignupPageState extends State<SignupPage> {
                       "Compl.", _tComplement, Validation.defaultValidation)
                 ],
               ),
+              spaceBetweenElements(y: 15.0),
+              drawCheckButton(),
               spaceBetweenElements(y: 30.0),
-              AppButton(
-                  'Cadastrar', Colors.white, 22, Colors.blue, _onClickSignup),
+              AppButton('Cadastrar', Colors.white, 22, Colors.blue,
+                  () => _onClickSignup(context)),
               spaceBetweenElements(y: 30.0),
             ],
           )),
@@ -138,12 +144,31 @@ class _SignupPageState extends State<SignupPage> {
     return genderType.toString().split('.').last;
   }
 
-  _onClickSignup() {
+  // Desenha o botão check mais o texto
+  Container drawCheckButton() {
+    return Container(
+      child: CheckboxListTile(
+        title: const Text("De acordo com as políticas do app"),
+        value: _compliance,
+        onChanged: _updateCompliance,
+      ),
+    );
+  }
+
+  // Atualiza o check
+  // NOTA: a tela é redesenhada pelo SETSTATE
+  void _updateCompliance(bool value) {
+    setState(() {
+      _compliance = value;
+    });
+  }
+
+  void _onClickSignup(BuildContext context) async {
     print('>>> FUNÇÃO: _onClickSignup');
     final String fullName = _tFullName.text;
     final String email = _tEmail.text;
-    final String pass = _tPass.text;
-    final String confirmPass = _tConfirmPass.text;
+    final String password = _tPass.text;
+    final String confirmPassword = _tConfirmPass.text;
     final String gender = _getValue(_genderSelected);
     final String zipCode = _tZipCode.text;
     final String state = _tState.text;
@@ -153,7 +178,47 @@ class _SignupPageState extends State<SignupPage> {
     final String complement = _tComplement.text;
 
     final bool formRespValidation = _formSignUpkey.currentState.validate();
-    print('$formRespValidation');
-    print('$gender');
+
+    if (!formRespValidation) {
+      return;
+    }
+
+    Validation.validateConfirmPassword(password, confirmPassword);
+
+    var apiResponse = await SignupAPI.signup(
+      email,
+      password,
+      fullName,
+      gender,
+      address,
+      houseNumber,
+      state,
+      city,
+      zipCode,
+      complement,
+      _compliance,
+    );
+
+    if (apiResponse) {
+      print('DENTRO DO MÉTODO QUE GERA O ALERT');
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Cadastro'),
+            content: Text('Conta criada com sucesso!'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('ok'),
+                onPressed: () {
+                  push(context, LoginPage());
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }

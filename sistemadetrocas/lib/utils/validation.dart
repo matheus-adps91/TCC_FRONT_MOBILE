@@ -44,6 +44,7 @@ class Validation {
 
   // Esse método não é disparado pelo validate
   static bool validateConfirmPassword(String value, String anotherVlaue) {
+    print('>>> FUNÇÃO: validateConfirmPassword');
     return value.hashCode != anotherVlaue.hashCode ? false : true;
   }
 }

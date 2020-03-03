@@ -11,3 +11,7 @@ push(BuildContext context, Widget page) {
     ),
   );
 }
+
+pop(BuildContext context) {
+  return Navigator.pop(context);
+}
