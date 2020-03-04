@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:sistemadetrocas/infrastructure/api_entityResponse.dart';
 
 class SignupAPI {
-  static Future<bool> signup(
+  static Future<ApiEntityResponse<bool>> signup(
       String email,
       String password,
       String fullName,
@@ -39,13 +40,13 @@ class SignupAPI {
     print(response.statusCode.toString());
     print(response.body.toString());
 
+    Map mapResponse = json.decode(response.body);
+    bool status = mapResponse['success'];
     if (response.statusCode == 201) {
-      print('ANALSIANDO STATUS CODE');
-      Map mapResponse = json.decode(response.body);
-      bool success = mapResponse['success'];
-      return success;
-    }
+      print('ANALISANDO STATUS CODE');
 
-    return false;
+      return ApiEntityResponse.success(status);
+    }
+    return ApiEntityResponse.fail(status);
   }
 }

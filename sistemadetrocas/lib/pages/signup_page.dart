@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sistemadetrocas/pages/login_page.dart';
+import 'package:sistemadetrocas/infrastructure/api_entityResponse.dart';
 import 'package:sistemadetrocas/requests/signup_api.dart';
+import 'package:sistemadetrocas/utils/composedWidgets/app_alert.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_button.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_formField.dart';
-import 'package:sistemadetrocas/utils/nav.dart';
 import 'package:sistemadetrocas/utils/validation.dart';
 
 enum GenderType {
@@ -185,7 +185,7 @@ class _SignupPageState extends State<SignupPage> {
 
     Validation.validateConfirmPassword(password, confirmPassword);
 
-    var apiResponse = await SignupAPI.signup(
+    ApiEntityResponse apiResponse = await SignupAPI.signup(
       email,
       password,
       fullName,
@@ -199,26 +199,12 @@ class _SignupPageState extends State<SignupPage> {
       _compliance,
     );
 
-    if (apiResponse) {
-      print('DENTRO DO MÉTODO QUE GERA O ALERT');
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Cadastro'),
-            content: Text('Conta criada com sucesso!'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('ok'),
-                onPressed: () {
-                  push(context, LoginPage());
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
+    AppAlert appAlert = AppAlert(
+      apiResponse.actionMsg,
+      apiResponse.textButton,
+      apiResponse.actionPerformed,
+      context,
+    );
+    appAlert.buildAlert();
   }
 }
