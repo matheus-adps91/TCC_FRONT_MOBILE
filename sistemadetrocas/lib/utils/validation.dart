@@ -1,11 +1,20 @@
 // Classe para conter os métodos de validação de campos
 class Validation {
+  // Esse método é apenas para teste
+  static String defaultValidation(String value) {
+    print('>>> FUNÇÃO: defaultValidation');
+    if (value.isEmpty) {
+      return "VALIDAÇÃO TESTE";
+    }
+    return null;
+  }
+
   static String validateLogin(String value) {
     print('>>> FUNÇÃO: validateLogin');
     if (value.isEmpty) {
       return "Login não pode estar em branco";
     }
-    if (!value.contains('@')) {
+    if (!value.contains('@') || !value.contains('.com')) {
       return "Login inválido";
     }
     return null;
@@ -29,15 +38,6 @@ class Validation {
     }
     if (value.length != 8) {
       return "Código Postal incorreto";
-    }
-    return null;
-  }
-
-  // Esse método é apenas para teste
-  static String defaultValidation(String value) {
-    print('>>> FUNÇÃO: defaultValidation');
-    if (value.isEmpty) {
-      return "VALIDAÇÃO TESTE";
     }
     return null;
   }

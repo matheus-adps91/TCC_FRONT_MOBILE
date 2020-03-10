@@ -15,10 +15,6 @@ class SignupAPI {
       String zipCode,
       String complement,
       bool compliance) async {
-    // URL para criar usuário
-    final String urlSignup = 'http://192.168.1.39:12345/user/create';
-
-    Map<String, String> headers = {"Content-Type": "application/json"};
     Map params = {
       "email": email,
       "password": password,
@@ -33,8 +29,9 @@ class SignupAPI {
       "compliance": compliance,
     };
     String sParams = json.encode(params);
-
-    var response = await http.post(urlSignup, body: sParams, headers: headers);
+    Map<String, String> headers = {"Content-Type": "application/json"};
+    var response = await http.post('http://192.168.43.234:12345/user/create',
+        body: sParams, headers: headers);
 
     print(response.headers.toString());
     print(response.statusCode.toString());
@@ -44,7 +41,6 @@ class SignupAPI {
     bool status = mapResponse['success'];
     if (response.statusCode == 201) {
       print('ANALISANDO STATUS CODE');
-
       return ApiEntityResponse.success(status);
     }
     return ApiEntityResponse.fail(status);

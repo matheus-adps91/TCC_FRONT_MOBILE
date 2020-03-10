@@ -64,7 +64,7 @@ class LoginPage extends StatelessWidget {
     final String senha = _tSenha.text;
 
     final bool formRespValidation = _formKey.currentState.validate();
-
+    print(formRespValidation);
     if (!formRespValidation) {
       return;
     }

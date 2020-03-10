@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:sistemadetrocas/infrastructure/api_entityResponse.dart';
+import 'package:sistemadetrocas/utils/composedWidgets/app_alert.dart';
+import 'package:sistemadetrocas/utils/composedWidgets/app_button.dart';
+
+import 'package:sistemadetrocas/requests/logout_api.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -7,13 +12,29 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Página Inicial'),
       ),
-      body: _body(),
+      body: _body(context),
     );
   }
 
-  _body() {
+  _body(BuildContext context) {
     return Center(
-      child: Text('Página Inicial'),
+      child: AppButton(
+        'SAIR',
+        Colors.white,
+        18,
+        Colors.blue,
+        () => _onClickLogout(context),
+      ),
     );
+  }
+
+  _onClickLogout(BuildContext context) async {
+    ApiEntityResponse apiEntityResponse = await LogoutAPI.logout();
+    AppAlert(
+      apiEntityResponse.actionMsg,
+      apiEntityResponse.textButton,
+      apiEntityResponse.actionPerformed,
+      context,
+    ).buildAlert();
   }
 }

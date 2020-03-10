@@ -8,12 +8,16 @@ class AppFormField extends StatelessWidget {
   TextInputType keyboardType;
   TextInputAction keyboardAction;
   bool password;
+  bool autoFocus;
+  FocusNode nextFocus;
 
   // Constructor
   AppFormField(
     this.property,
-    this.controller,
-    this.validator, {
+    this.controller, {
+    this.autoFocus = false,
+    this.nextFocus,
+    this.validator,
     this.keyboardType = TextInputType.text,
     this.keyboardAction = TextInputAction.next,
     this.password = false,
@@ -24,6 +28,7 @@ class AppFormField extends StatelessWidget {
     return Container(
       width: 100,
       child: TextFormField(
+        autofocus: autoFocus,
         controller: controller,
         keyboardType: keyboardType,
         textInputAction: keyboardAction,

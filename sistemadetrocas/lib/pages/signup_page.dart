@@ -21,6 +21,7 @@ class _SignupPageState extends State<SignupPage> {
   bool _compliance = false;
   // Variável global para armazenar o estado da aplicação
   final _formSignUpkey = GlobalKey<FormState>();
+
   // Controllers para os campos do formulário
   final _tFullName = TextEditingController();
   final _tEmail = TextEditingController();
@@ -50,18 +51,18 @@ class _SignupPageState extends State<SignupPage> {
           padding: EdgeInsets.only(top: 20, left: 30, right: 30),
           child: ListView(
             children: <Widget>[
-              AppFormField(
-                  "Nome Completo", _tFullName, Validation.validateLogin),
+              AppFormField("Nome Completo", _tFullName,
+                  validator: validateFullName),
               spaceBetweenElements(y: 15),
-              AppFormField("Email", _tEmail, Validation.validateLogin,
+              AppFormField("Email", _tEmail,
+                  validator: Validation.validateLogin,
                   keyboardType: TextInputType.emailAddress),
               spaceBetweenElements(y: 15),
-              AppFormField("Password", _tPass, Validation.validatePassword,
-                  password: true),
+              AppFormField("Password", _tPass,
+                  validator: Validation.validatePassword, password: true),
               spaceBetweenElements(y: 15),
               AppFormField("Confirm Password", _tConfirmPass,
-                  Validation.validatePassword,
-                  password: true),
+                  validator: Validation.validatePassword, password: true),
               spaceBetweenElements(y: 15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -74,25 +75,28 @@ class _SignupPageState extends State<SignupPage> {
                 ],
               ),
               spaceBetweenElements(y: 15.0),
-              AppFormField(
-                  "Código Postal", _tZipCode, Validation.validateZipCode,
+              AppFormField("Código Postal", _tZipCode,
+                  validator: Validation.validateZipCode,
                   keyboardType: TextInputType.number),
               spaceBetweenElements(y: 15.0),
-              AppFormField("Estado", _tState, Validation.defaultValidation),
+              AppFormField("Estado", _tState,
+                  validator: Validation.defaultValidation),
               spaceBetweenElements(y: 15.0),
-              AppFormField("Cidade", _tCity, Validation.defaultValidation),
+              AppFormField("Cidade", _tCity,
+                  validator: Validation.defaultValidation),
               spaceBetweenElements(y: 15.0),
-              AppFormField("Rua", _tStreet, Validation.defaultValidation),
+              AppFormField("Rua", _tStreet,
+                  validator: Validation.defaultValidation),
               spaceBetweenElements(y: 15.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  AppFormField(
-                      "Número", _tHouseNumber, Validation.defaultValidation,
+                  AppFormField("Número", _tHouseNumber,
+                      validator: Validation.defaultValidation,
                       keyboardType: TextInputType.number),
                   spaceBetweenElements(x: 5.0),
-                  AppFormField(
-                      "Compl.", _tComplement, Validation.defaultValidation)
+                  AppFormField("Compl.", _tComplement,
+                      validator: Validation.defaultValidation)
                 ],
               ),
               spaceBetweenElements(y: 15.0),
@@ -206,5 +210,14 @@ class _SignupPageState extends State<SignupPage> {
       context,
     );
     appAlert.buildAlert();
+  }
+
+  // ESTA FUNÇÃO NÃO É AQUI, APENAS TESTE
+  String validateFullName(String value) {
+    print('>>> FUNÇÃO: validateFullName');
+    if (value.isEmpty) {
+      return "Digite o seu nome";
+    }
+    return null;
   }
 }

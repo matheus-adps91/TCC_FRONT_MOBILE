@@ -19,12 +19,13 @@ class AppAlert {
 
   // Método para construir o alert
   buildAlert() {
+    print('dentro do build alert');
     showDialog(
       context: signupContext,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Cadastro'),
+          title: Text('Sistema de Trocas'),
           content: Text(description),
           actions: <Widget>[
             FlatButton(
