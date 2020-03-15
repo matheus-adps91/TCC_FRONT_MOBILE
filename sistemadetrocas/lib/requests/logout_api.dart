@@ -11,7 +11,7 @@ class LogoutAPI {
       'token': token,
     };
 
-    var response = await http.post('http://192.168.43.234:12345/auth/logout',
+    var response = await http.post('http://192.168.1.33:12345/auth/logout',
         headers: headers);
 
     print(response.statusCode);

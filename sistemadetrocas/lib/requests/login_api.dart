@@ -10,7 +10,7 @@ class LoginAPI {
     // Para enviar o cabeçalho em formato JSON, deve converter o MAP para STRING
     String sParams = json.encode(params);
     Map<String, String> headers = {"Content-Type": "application/json"};
-    var response = await http.post('http://192.168.43.234:12345/auth/login',
+    var response = await http.post('http://192.168.1.33:12345/auth/login',
         body: sParams, headers: headers);
 
     if (response.statusCode == 201) {

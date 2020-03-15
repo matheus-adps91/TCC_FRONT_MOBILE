@@ -1,40 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:sistemadetrocas/infrastructure/api_entityResponse.dart';
-import 'package:sistemadetrocas/utils/composedWidgets/app_alert.dart';
-import 'package:sistemadetrocas/utils/composedWidgets/app_button.dart';
+import 'package:sistemadetrocas/pages/tabs/register_product.dart';
+import 'package:sistemadetrocas/pages/tabs/search_product.dart';
+import 'package:sistemadetrocas/pages/tabs/status_deal.dart';
 
-import 'package:sistemadetrocas/requests/logout_api.dart';
+class HomePage extends StatefulWidget {
+  const HomePage({ Key key }) : super(key: key);
+  @override
+  _HomePageState createState() => _HomePageState();
+}
 
-class HomePage extends StatelessWidget {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
+
+  TabController _tabController;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Página Inicial'),
+        bottom: TabBar(tabs: [
+          Tab(icon: Icon(Icons.add)),
+          Tab(icon: Icon(Icons.search)),
+          Tab(icon: Icon(Icons.compare_arrows))
+        ],
+        controller: _tabController,),
       ),
       body: _body(context),
     );
   }
 
   _body(BuildContext context) {
-    return Center(
-      child: AppButton(
-        'SAIR',
-        Colors.white,
-        18,
-        Colors.blue,
-        () => _onClickLogout(context),
-      ),
+    return TabBarView(
+      controller: _tabController,
+      children: <Widget>[
+        Register(),
+        SearchProduct(),
+        StatusDeal(),
+      ],
     );
   }
 
-  _onClickLogout(BuildContext context) async {
-    ApiEntityResponse apiEntityResponse = await LogoutAPI.logout();
-    AppAlert(
-      apiEntityResponse.actionMsg,
-      apiEntityResponse.textButton,
-      apiEntityResponse.actionPerformed,
-      context,
-    ).buildAlert();
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(vsync: this, length: 3,);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 }
