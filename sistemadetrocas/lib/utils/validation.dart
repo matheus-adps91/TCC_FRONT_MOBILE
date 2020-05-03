@@ -1,10 +1,20 @@
 // Classe para conter os métodos de validação de campos
+
 class Validation {
+
   // Esse método é apenas para teste
   static String defaultValidation(String value) {
     print('>>> FUNÇÃO: defaultValidation');
     if (value.isEmpty) {
       return "VALIDAÇÃO TESTE";
+    }
+    return null;
+  }
+
+  static String validateFullName(String value) {
+    print('>>> FUNÇÃO: validateFullName');
+    if (value.isEmpty) {
+      return "Digite o seu nome";
     }
     return null;
   }

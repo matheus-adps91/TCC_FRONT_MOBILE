@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class AppButton extends StatelessWidget {
   // Fields
-  String text;
-  Color textButtonColor;
-  double textFontSize;
-  Color buttonColor;
-  Function onPressed;
+  final String text;
+  final Color textButtonColor;
+  final double textFontSize;
+  final Color buttonColor;
+  final Function onPressed;
 
   // Constructor
   AppButton(

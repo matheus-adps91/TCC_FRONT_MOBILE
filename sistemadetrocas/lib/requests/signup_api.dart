@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:sistemadetrocas/infrastructure/api_entityResponse.dart';
+import 'package:sistemadetrocas/serverConfigurations/server_configuration.dart';
 
 class SignupAPI {
   static Future<ApiEntityResponse<bool>> signup(
@@ -15,6 +16,9 @@ class SignupAPI {
       String zipCode,
       String complement,
       bool compliance) async {
+    var headers = {
+      "Content-Type": "application/json"
+    };
     Map params = {
       "email": email,
       "password": password,
@@ -28,21 +32,19 @@ class SignupAPI {
       "complement": complement,
       "compliance": compliance,
     };
+    // Para enviar o cabeçalho em formato JSON, deve converter o MAP para STRING
     String sParams = json.encode(params);
-    Map<String, String> headers = {"Content-Type": "application/json"};
-    var response = await http.post('http://192.168.1.33:12345/user/create',
+    var response = await http.post(
+        ServerConfigurations.create_user_url,
         body: sParams, headers: headers);
 
     print(response.headers.toString());
     print(response.statusCode.toString());
-    print(response.body.toString());
 
-    Map mapResponse = json.decode(response.body);
-    bool status = mapResponse['success'];
     if (response.statusCode == 201) {
       print('ANALISANDO STATUS CODE');
-      return ApiEntityResponse.success(status);
+      return ApiEntityResponse.success(true);
     }
-    return ApiEntityResponse.fail(status);
+    return ApiEntityResponse.fail(false);
   }
 }

@@ -4,7 +4,7 @@ import 'package:sistemadetrocas/requests/logout_api.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_alert.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_button.dart';
 
-class StatusDeal extends StatelessWidget {
+class Deals extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -23,8 +23,8 @@ class StatusDeal extends StatelessWidget {
     AppAlert(
       apiEntityResponse.actionMsg,
       apiEntityResponse.textButton,
-      apiEntityResponse.actionPerformed,
       context,
+      true
     ).buildAlert();
   }
 }

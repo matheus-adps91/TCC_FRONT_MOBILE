@@ -2,15 +2,21 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:sistemadetrocas/infrastructure/api_response.dart';
 import 'package:sistemadetrocas/model/usuario.dart';
+import 'package:sistemadetrocas/serverConfigurations/server_configuration.dart';
 import 'package:sistemadetrocas/utils/prefs.dart';
 
 class LoginAPI {
   static Future<ApiResponse<Usuario>> login(String login, String senha) async {
-    Map params = {'email': login, 'password': senha};
+    Map<String, String> headers = {
+      "Content-Type": "application/json"
+    };
+    Map params = {
+      'email': login,
+      'password': senha
+    };
     // Para enviar o cabeçalho em formato JSON, deve converter o MAP para STRING
     String sParams = json.encode(params);
-    Map<String, String> headers = {"Content-Type": "application/json"};
-    var response = await http.post('http://192.168.1.33:12345/auth/login',
+    var response = await http.post(ServerConfigurations.login_url,
         body: sParams, headers: headers);
 
     if (response.statusCode == 201) {

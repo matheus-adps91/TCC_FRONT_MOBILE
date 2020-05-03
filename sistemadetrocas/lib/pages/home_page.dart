@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sistemadetrocas/pages/tabs/register_product.dart';
-import 'package:sistemadetrocas/pages/tabs/search_product.dart';
-import 'package:sistemadetrocas/pages/tabs/status_deal.dart';
+import 'package:sistemadetrocas/pages/tabs/ownProductList.dart';
+import 'package:sistemadetrocas/pages/tabs/othersProductList.dart';
+import 'package:sistemadetrocas/pages/tabs/dealsList.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({ Key key }) : super(key: key);
@@ -32,9 +32,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     return TabBarView(
       controller: _tabController,
       children: <Widget>[
-        Register(),
-        SearchProduct(),
-        StatusDeal(),
+        OwnProducts(),
+        OthersProduct(),
+        Deals(),
       ],
     );
   }

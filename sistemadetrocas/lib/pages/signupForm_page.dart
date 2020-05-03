@@ -52,7 +52,7 @@ class _SignupPageState extends State<SignupPage> {
           child: ListView(
             children: <Widget>[
               AppFormField("Nome Completo", _tFullName,
-                  validator: validateFullName),
+                  validator: Validation.validateFullName),
               spaceBetweenElements(y: 15),
               AppFormField("Email", _tEmail,
                   validator: Validation.validateLogin,
@@ -187,6 +187,7 @@ class _SignupPageState extends State<SignupPage> {
       return;
     }
 
+    // FALTA UM IF AQUI
     Validation.validateConfirmPassword(password, confirmPassword);
 
     ApiEntityResponse apiResponse = await SignupAPI.signup(
@@ -200,24 +201,16 @@ class _SignupPageState extends State<SignupPage> {
       city,
       zipCode,
       complement,
-      _compliance,
+      _compliance
     );
 
     AppAlert appAlert = AppAlert(
       apiResponse.actionMsg,
       apiResponse.textButton,
-      apiResponse.actionPerformed,
       context,
+      apiResponse.status
     );
     appAlert.buildAlert();
   }
 
-  // ESTA FUNÇÃO NÃO É AQUI, APENAS TESTE
-  String validateFullName(String value) {
-    print('>>> FUNÇÃO: validateFullName');
-    if (value.isEmpty) {
-      return "Digite o seu nome";
-    }
-    return null;
-  }
 }

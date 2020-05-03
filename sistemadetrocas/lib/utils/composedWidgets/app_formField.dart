@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class AppFormField extends StatelessWidget {
   // Field
-  String property;
-  TextEditingController controller;
-  FormFieldValidator<String> validator;
-  TextInputType keyboardType;
-  TextInputAction keyboardAction;
-  bool password;
-  bool autoFocus;
-  FocusNode nextFocus;
+  final String property;
+  final TextEditingController controller;
+  final FormFieldValidator<String> validator;
+  final TextInputType keyboardType;
+  final TextInputAction keyboardAction;
+  final bool password;
+  final bool autoFocus;
+  final FocusNode nextFocus;
 
   // Constructor
   AppFormField(
@@ -39,6 +39,7 @@ class AppFormField extends StatelessWidget {
           labelStyle: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.w300,
+            color: Colors.black,
           ),
         ),
       ),

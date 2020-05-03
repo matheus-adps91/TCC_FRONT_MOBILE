@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class AppInputText extends StatelessWidget {
   // Fields
-  String textTitle;
-  String textHint;
-  TextInputType keyboardType;
-  TextInputAction keyboardAction;
-  TextEditingController controller;
-  bool password;
-  FormFieldValidator<String> validator;
+  final String textTitle;
+  final String textHint;
+  final TextInputType keyboardType;
+  final TextInputAction keyboardAction;
+  final TextEditingController controller;
+  final bool password;
+  final FormFieldValidator<String> validator;
 
   // Constructor
   AppInputText(

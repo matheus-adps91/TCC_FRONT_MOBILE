@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sistemadetrocas/pages/login_page.dart';
+import 'package:sistemadetrocas/pages/home_page.dart';
+import 'package:sistemadetrocas/pages/loginForm_page.dart';
+import 'package:sistemadetrocas/requests/products/crudProduct_api.dart';
 import 'package:sistemadetrocas/utils/nav.dart';
 
 class AppAlert {
@@ -7,21 +9,21 @@ class AppAlert {
   String description;
   String buttonText;
   bool status;
-  BuildContext signupContext;
+  BuildContext context;
 
   // Constructor
   AppAlert(
     this.description,
     this.buttonText,
+    this.context,
     this.status,
-    this.signupContext,
   );
 
   // Método para construir o alert
   buildAlert() {
-    print('dentro do build alert');
+    print('dentro do buildAlert()');
     showDialog(
-      context: signupContext,
+      context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -41,6 +43,30 @@ class AppAlert {
           ],
         );
       },
+    );
+  }
+
+  buildAlertCreatingProduct() {
+    print('dentro do buildAlertCreatingProduct()');
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Sistema de Trocas'),
+          content: Text(description),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(buttonText),
+              onPressed: () {
+                if ( status ) {
+                  push(context, HomePage(), replace: true);
+                }
+              },
+            )
+          ],
+        );
+      }
     );
   }
 }

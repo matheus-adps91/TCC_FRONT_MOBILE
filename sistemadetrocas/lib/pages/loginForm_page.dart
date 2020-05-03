@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sistemadetrocas/infrastructure/api_response.dart';
 import 'package:sistemadetrocas/model/usuario.dart';
 import 'package:sistemadetrocas/pages/home_page.dart';
-import 'package:sistemadetrocas/pages/signup_page.dart';
+import 'package:sistemadetrocas/pages/signupForm_page.dart';
 import 'package:sistemadetrocas/requests/login_api.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_button.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_inputText.dart';
