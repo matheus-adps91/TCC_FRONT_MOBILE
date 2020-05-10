@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sistemadetrocas/pages/home_page.dart';
 import 'package:sistemadetrocas/pages/loginForm_page.dart';
-import 'package:sistemadetrocas/requests/products/crudProduct_api.dart';
 import 'package:sistemadetrocas/utils/nav.dart';
 
 class AppAlert {

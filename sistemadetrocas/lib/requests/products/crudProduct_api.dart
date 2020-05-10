@@ -1,5 +1,4 @@
-import 'dart:convert';
-import 'package:flutter/rendering.dart';
+import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
 import 'package:sistemadetrocas/infrastructure/api_entityResponse.dart';
@@ -19,11 +18,10 @@ class CrudProduct {
       'name': product.gName,
       'description': product.gDesc,
       'productCategory': product.gProdCat,
-      'sImage': product.gImage,
-      'imageName': product.gImgFileName
+      'imagePath': product.gImgPath
     };
     // Para enviar o cabeçalho em formato JSON, deve converter o MAP para STRING
-    String sParams = json.encode(params);
+    String sParams = convert.json.encode(params);
     var response = await http.post(
         ServerConfigurations.create_product_url,
         body: sParams, headers: headers
@@ -39,11 +37,20 @@ class CrudProduct {
     return ApiEntityResponse.fail(false);
   }
 
-  static List<Product> getProducts()  {
-    Product p1 = Product('teste1','teste desc','Memoria',);
-    Product p2 = Product('teste2','teste desc','Memoria',);
-    Product p3 = Product('teste3','teste desc','Memoria',);
-    Product p4 = Product('teste4','teste desc','Memoria',);
+  static Future<List<Product>> getProducts()  async {
+    String token = await Prefs.getString('token');
+    Map<String,String> headers = {
+      "Content-Type": "application/json",
+      "token": token
+    };
+    var response = await http.get(
+      ServerConfigurations.get_all_product_url,headers: headers
+    );
+    String json = response.body;
+    Product p1 = Product('teste1','teste desc','Memoria');
+    Product p2 = Product('teste2','teste desc','Memoria');
+    Product p3 = Product('teste3','teste desc','Memoria');
+    Product p4 = Product('teste4','teste desc','Memoria');
     List<Product> products = List<Product>();
     products.add(p1);
     products.add(p2);

@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'dart:convert' as convert;
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
@@ -29,8 +29,8 @@ class _CreateProductState extends State<CreateProduct> {
   final tProductName = TextEditingController();
   final tDescription = TextEditingController();
 
-  // Armaze o caminho da foto. (até a pasta assets)
-  File _file;
+  // Armazena a foto
+  File _photoFile;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class _CreateProductState extends State<CreateProduct> {
                 child: Text('Tire uma foto', style: TextStyle(fontSize: 25),)),
             spaceBetweenElements(y: 15.0),
             Container(
-                child: _file != null ? Image.file(_file) : Image.asset("assets/images/camera.png", height: 300)),
+                child: _photoFile != null ? Image.file(_photoFile) : Image.asset("assets/images/camera.png", height: 300)),
             spaceBetweenElements(y: 15.0),
             FloatingActionButton(
               onPressed: _onClickCamera,
@@ -129,13 +129,18 @@ class _CreateProductState extends State<CreateProduct> {
       return;
     }
 
+    String imagePathFromStorage = await _uploadImageToStorage();
     final String name = tProductName.text;
     final String description = tDescription.text;
     final String productCategory = dropdownValue.toString();
-    final String image = _file != null ? _convertImageToBase64(_file) : 'Sem foto';
-    final String imageName = _file != null ? path.basename(_file.path) : 'Sem nome';
+    final String imagePath =  imagePathFromStorage;
 
-    final Product product = Product(name,description, productCategory, base64Image: image, imageFileName: imageName);
+    final Product product = Product(
+        name,
+        description,
+        productCategory,
+        imagePath: imagePath
+    );
 
     ApiEntityResponse apiResponse = await CrudProduct.create(product);
 
@@ -148,19 +153,30 @@ class _CreateProductState extends State<CreateProduct> {
     appAlert.buildAlertCreatingProduct();
   }
 
-  // Faz a conversão da imagem para base 64
-  String _convertImageToBase64(File file) {
-    final List<int> imageBytes = _file.readAsBytesSync();
-     return convert.base64Encode(imageBytes);
+
+   Future<String> _uploadImageToStorage() async {
+
+    StorageTaskSnapshot futureTaskSnapshot = await _upload();
+    String downloadURL = await futureTaskSnapshot.ref.getPath();
+    return downloadURL;
   }
+
+  Future<StorageTaskSnapshot> _upload() async {
+    final StorageReference fbStorageRef = FirebaseStorage.instance
+        .ref()
+        .child(_photoFile.path);
+    final StorageUploadTask task = fbStorageRef.putFile(_photoFile);
+    var futureTaskSnapshot = await task.onComplete;
+    return futureTaskSnapshot;
+  }
+
 
   // Inicializa a câmera do device
   void _onClickCamera() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
-    print(image);
+      File image = await ImagePicker.pickImage(source: ImageSource.camera);
 
     setState(() {
-      _file = image;
+      _photoFile = image;
     });
   }
 

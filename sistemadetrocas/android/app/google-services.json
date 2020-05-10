@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1063697332424",
+    "firebase_url": "https://tcc-sistemas-de-trocas.firebaseio.com",
+    "project_id": "tcc-sistemas-de-trocas",
+    "storage_bucket": "tcc-sistemas-de-trocas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1063697332424:android:2edc4399131ceb5bb2cdfd",
+        "android_client_info": {
+          "package_name": "com.example.sistemadetrocas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1063697332424-egr6scee5sc4drqnta84ghr3ksh0qskr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDWrBOlEuHEV7e5SP9AaEiQqydwEg6LNc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1063697332424-egr6scee5sc4drqnta84ghr3ksh0qskr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

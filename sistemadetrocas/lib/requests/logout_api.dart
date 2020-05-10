@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:sistemadetrocas/infrastructure/api_entityResponse.dart';
 import 'package:sistemadetrocas/serverConfigurations/server_configuration.dart';
 import 'package:sistemadetrocas/utils/prefs.dart';
