@@ -31,7 +31,6 @@ class CrudProduct {
     print(response.statusCode.toString());
 
     if ( response.statusCode == 201 ) {
-      print('STATUS CODE 200');
       return ApiEntityResponse.success(true);
     }
     return ApiEntityResponse.fail(false);
@@ -44,18 +43,23 @@ class CrudProduct {
       "token": token
     };
     var response = await http.get(
-      ServerConfigurations.get_all_product_url,headers: headers
+      ServerConfigurations.get_all_my_product_url,headers: headers
     );
-    String json = response.body;
-    Product p1 = Product('teste1','teste desc','Memoria');
-    Product p2 = Product('teste2','teste desc','Memoria');
-    Product p3 = Product('teste3','teste desc','Memoria');
-    Product p4 = Product('teste4','teste desc','Memoria');
-    List<Product> products = List<Product>();
-    products.add(p1);
-    products.add(p2);
-    products.add(p3);
-    products.add(p4);
+
+    // API me devolve uma lista de Products por isso pego usando LIST
+    // Lista dinâmica, converter para uma de carros
+    final List dynamicList = convert.json.decode(response.body);
+    print (dynamicList);
+    final List<Product> products = _convertDynamicToTypedList(dynamicList);
+    return products;
+  }
+
+  static List<Product> _convertDynamicToTypedList(List dynamicList) {
+    final List<Product> products = List<Product>();
+    for (Map currentMap in dynamicList ) {
+      Product product = Product.fromJson(currentMap);
+      products.add(product);
+    }
     return products;
   }
 }

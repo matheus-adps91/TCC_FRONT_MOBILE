@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as path;
 import 'package:sistemadetrocas/infrastructure/api_entityResponse.dart';
 import 'package:sistemadetrocas/model/product.dart';
 import 'package:sistemadetrocas/model/productCategory.dart';
+import 'package:sistemadetrocas/pages/tabs/constants.dart';
 import 'package:sistemadetrocas/requests/products/crudProduct_api.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_alert.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_button.dart';
@@ -31,6 +31,9 @@ class _CreateProductState extends State<CreateProduct> {
 
   // Armazena a foto
   File _photoFile;
+
+  // Armazena o caminho da foto para o fireStorage
+  String _imagePathFromStorage;
 
   @override
   Widget build(BuildContext context) {
@@ -129,17 +132,24 @@ class _CreateProductState extends State<CreateProduct> {
       return;
     }
 
-    String imagePathFromStorage = await _uploadImageToStorage();
+    // Se o usuário tirou a foto do produto, faz upload
+    // Senão seta a imagem padrão
+    if ( _photoFile != null ){
+      _imagePathFromStorage = await _uploadImageToStorage();
+    } else {
+      _imagePathFromStorage = 'assets/images/sem_foto.jpeg';
+    }
+
     final String name = tProductName.text;
     final String description = tDescription.text;
     final String productCategory = dropdownValue.toString();
-    final String imagePath =  imagePathFromStorage;
+    final String imagePath =  _imagePathFromStorage;
 
     final Product product = Product(
         name,
         description,
         productCategory,
-        imagePath: imagePath
+        imagePath
     );
 
     ApiEntityResponse apiResponse = await CrudProduct.create(product);
@@ -157,14 +167,16 @@ class _CreateProductState extends State<CreateProduct> {
    Future<String> _uploadImageToStorage() async {
 
     StorageTaskSnapshot futureTaskSnapshot = await _upload();
-    String downloadURL = await futureTaskSnapshot.ref.getPath();
+    String downloadURL = await futureTaskSnapshot.ref.getDownloadURL();
     return downloadURL;
   }
 
   Future<StorageTaskSnapshot> _upload() async {
+    final RegExp regex = RegExp('([^?/]*\.(jpg))');
+    final String _fileName = regex.stringMatch(_photoFile.path);
     final StorageReference fbStorageRef = FirebaseStorage.instance
         .ref()
-        .child(_photoFile.path);
+        .child(Constants.url_fire_storage_products+_fileName);
     final StorageUploadTask task = fbStorageRef.putFile(_photoFile);
     var futureTaskSnapshot = await task.onComplete;
     return futureTaskSnapshot;

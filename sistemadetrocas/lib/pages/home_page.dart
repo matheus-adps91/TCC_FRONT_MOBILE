@@ -17,6 +17,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         bottom: TabBar(tabs: [
           Tab(icon: Icon(Icons.add)),
           Tab(icon: Icon(Icons.search)),
