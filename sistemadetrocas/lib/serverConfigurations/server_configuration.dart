@@ -6,4 +6,5 @@ class ServerConfigurations {
   static const String logout_url = url+"auth/logout";
   static const String create_product_url = url+"product/create";
   static const String get_all_my_product_url = url+"product/get-all-my-products";
+  static const String delete_product_url = url+"product/delete-by-name/";
 }

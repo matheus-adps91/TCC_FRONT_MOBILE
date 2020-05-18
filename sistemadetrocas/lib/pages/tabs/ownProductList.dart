@@ -1,26 +1,20 @@
-import 'dart:async';
-import 'dart:io';
-
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:sistemadetrocas/model/product.dart';
 import 'package:sistemadetrocas/pages/product/productForm_page.dart';
-import 'package:sistemadetrocas/pages/tabs/constants.dart';
 import 'package:sistemadetrocas/requests/products/crudProduct_api.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_button.dart';
 import 'package:sistemadetrocas/utils/nav.dart';
 
 class OwnProducts extends StatefulWidget {
+  Product product;
+
   @override
   _OwnProductsState createState() => _OwnProductsState();
 }
 
 class _OwnProductsState extends State<OwnProducts> {
   List<Product> _products;
-  Image _downloadedImage;
 
   @override
   void initState() {
@@ -60,8 +54,10 @@ class _OwnProductsState extends State<OwnProducts> {
     if (_products.length == 0) {
       return Container(
         child: Center(
-          child: Text('Não há produtos cadastrados',
-            style: TextStyle(fontSize: 20),),
+          child: Text(
+            'Não há produtos cadastrados',
+            style: TextStyle(fontSize: 20),
+          ),
         ),
       );
     }
@@ -81,7 +77,9 @@ class _OwnProductsState extends State<OwnProducts> {
                   loadingBuilder: (context, child, progress) {
                     return progress == null
                         ? child
-                        : Center(child: LinearProgressIndicator(backgroundColor: Colors.blue));
+                        : Center(
+                            child: LinearProgressIndicator(
+                                backgroundColor: Colors.blue));
                   },
                 ),
                 Text(
@@ -94,7 +92,9 @@ class _OwnProductsState extends State<OwnProducts> {
                     AppButton('DETALHES', Colors.blue, 20.0, Colors.white,
                         _onClickDetail),
                     AppButton('EXCLUIR', Colors.blue, 20.0, Colors.white,
-                        _onClickRemoveProduct)
+                        () {
+                         _shouldDeleteProduct(currentProduct);
+                        })
                   ],
                 ),
               ],
@@ -105,11 +105,53 @@ class _OwnProductsState extends State<OwnProducts> {
     );
   }
 
+  _shouldDeleteProduct(Product product ) async {
+    print('>>> Dentro da função _shouldDeleteProduct');
+    final bool shouldDelete = await _onClickDeleteProduct();
+    if ( shouldDelete ) {
+      CrudProduct.deleteProduct(product);
+      setState(() {
+        this._products.remove(product);
+      });
+    }
+
+  }
+
   _onClickDetail() {
     print('teste');
   }
 
-  _onClickRemoveProduct() {
-    print('teste');
+  // Constrói o diálogo de alerta e pega a resposta de exclusão do usuário
+  Future<bool> _onClickDeleteProduct() async {
+    print('>>> Dentro da função _onClickDeleteProduct');
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Excluir'),
+            content: Text('Deseja excluir este item?'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('OK'),
+                onPressed: _confirmedDeleted,
+              ),
+              FlatButton(
+                child: Text('CANCELAR'),
+                onPressed: _cancelledDeleted,
+              )
+            ],
+          );
+        });
+  }
+
+  void _confirmedDeleted() {
+    final bool result = true;
+    Navigator.pop(context, result);
+  }
+
+  void _cancelledDeleted() {
+    final bool result = false;
+    Navigator.pop(context, result);
   }
 }

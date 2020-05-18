@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:sistemadetrocas/infrastructure/api_entityResponse.dart';
 import 'package:sistemadetrocas/model/product.dart';
+import 'package:sistemadetrocas/requests/storage/fire_storage_service.dart';
 import 'package:sistemadetrocas/serverConfigurations/server_configuration.dart';
 import 'package:sistemadetrocas/utils/prefs.dart';
 
@@ -61,5 +62,24 @@ class CrudProduct {
       products.add(product);
     }
     return products;
+  }
+
+  static Future<ApiEntityResponse<bool>> deleteProduct (Product product) async {
+    print('>>> Dento da função deleteProduct');
+    print(product);
+    String token = await Prefs.getString('token');
+    Map<String,String> headers = {
+      "Content-Type": "application/json",
+      "token": token
+    };
+    var response = await http.delete(
+      ServerConfigurations.delete_product_url+product.gName, headers: headers
+    );
+    print(response.headers.toString());
+    print(response.statusCode.toString());
+
+    if ( response.statusCode == 200 ) {
+      FireStorageService.deleteImage(product.gImgPath);
+    }
   }
 }

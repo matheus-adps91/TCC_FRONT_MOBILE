@@ -20,7 +20,7 @@ class AppAlert {
 
   // Método para construir o alert
   buildAlert() {
-    print('dentro do buildAlert()');
+    print('>>> dentro da função buildAlert()');
     showDialog(
       context: context,
       barrierDismissible: false,

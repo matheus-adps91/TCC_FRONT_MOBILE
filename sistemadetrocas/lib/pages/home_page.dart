@@ -3,6 +3,8 @@ import 'package:sistemadetrocas/pages/tabs/ownProductList.dart';
 import 'package:sistemadetrocas/pages/tabs/othersProductList.dart';
 import 'package:sistemadetrocas/pages/tabs/dealsList.dart';
 
+
+
 class HomePage extends StatefulWidget {
   const HomePage({ Key key }) : super(key: key);
   @override
@@ -17,11 +19,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text('Sistema de Trocas'),
+        centerTitle: true,
         automaticallyImplyLeading: false,
         bottom: TabBar(tabs: [
-          Tab(icon: Icon(Icons.add)),
-          Tab(icon: Icon(Icons.search)),
-          Tab(icon: Icon(Icons.compare_arrows))
+          Tab(icon: Icon(Icons.storage), text: 'Meus Produtos',),
+          Tab(icon: Icon(Icons.search), text: 'Buscar Produtos',),
+          Tab(icon: Icon(Icons.compare_arrows), text: 'Negociações',)
         ],
         controller: _tabController,),
       ),

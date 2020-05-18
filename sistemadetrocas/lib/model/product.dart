@@ -19,4 +19,10 @@ class Product {
     productCategory = json['productCategory'];
     imagePath = json['imageName'];
    }
+
+   @override
+  String toString() {
+    return 'name: '+ gName +' description: ' + gDesc + ' productCategory: ' + gProdCat + ' imagePath: ' + imagePath;
+  }
+
 }

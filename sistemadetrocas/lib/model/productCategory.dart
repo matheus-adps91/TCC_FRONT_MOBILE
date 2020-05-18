@@ -6,6 +6,9 @@ class ProductCategory {
   static const String Monitor = 'Monitor';
   static const String Notebook = 'Notebook';
   static const String Memoria =  'Memória';
+  static const String Processador =  'Processador';
+  static const String Fonte =  'Fonte';
+  static const String Placamae =  'Placa-Mãe';
 
   static List<String> getAllProductCategories() {
     return <String> [
@@ -14,7 +17,10 @@ class ProductCategory {
       Mouse,
       Monitor,
       Notebook,
-      Memoria
+      Memoria,
+      Processador,
+      Fonte,
+      Placamae
     ];
   }
 }
