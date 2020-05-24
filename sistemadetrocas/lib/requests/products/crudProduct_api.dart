@@ -47,24 +47,22 @@ class CrudProduct {
       ServerConfigurations.get_all_my_product_url,headers: headers
     );
 
-    // API me devolve uma lista de Products por isso pego usando LIST
-    // Lista dinâmica, converter para uma de carros
-    final List dynamicList = convert.json.decode(response.body);
-    print (dynamicList);
-    final List<Product> products = _convertDynamicToTypedList(dynamicList);
+    print (response.body);
+    dynamic productsParsed = convert.json.decode(response.body);
+    List<Product> products = _convertDynamicToTypedList(productsParsed);
     return products;
   }
 
-  static List<Product> _convertDynamicToTypedList(List dynamicList) {
+  static List<Product> _convertDynamicToTypedList(productsParsed) {
     final List<Product> products = List<Product>();
-    for (Map currentMap in dynamicList ) {
-      Product product = Product.fromJson(currentMap);
+    for (dynamic currentProduct in productsParsed ) {
+      Product product = Product.fromJson(currentProduct);
       products.add(product);
     }
     return products;
   }
 
-  static Future<ApiEntityResponse<bool>> deleteProduct (Product product) async {
+  static Future<ApiEntityResponse<bool>> deleteProduct(Product product) async {
     print('>>> Dento da função deleteProduct');
     print(product);
     String token = await Prefs.getString('token');
@@ -79,7 +77,36 @@ class CrudProduct {
     print(response.statusCode.toString());
 
     if ( response.statusCode == 200 ) {
-      FireStorageService.deleteImage(product.gImgPath);
+      FireStorageService.deleteImageFromStorage(product.gImgPath);
+    }
+  }
+
+  static void updateProduct(Product product, String cacheProductName, String cacheImgPath) async {
+    print('>>> Dentro da função updateProduct');
+    print(product);
+    String token = await Prefs.getString('token');
+    Map<String,String> headers = {
+      "Content-Type": "application/json",
+      "token": token
+    };
+    Map params = {
+      'name': product.gName,
+      'description': product.gDesc,
+      'productCategory': product.gProdCat,
+      'imagePath': product.gImgPath
+    };
+    // Para enviar o cabeçalho em formato JSON, deve converter o MAP para STRING
+    String sParams = convert.json.encode(params);
+    var response = await http.put(
+      ServerConfigurations.update_product_url+cacheProductName, headers: headers, body: sParams
+    );
+    print(response.headers.toString());
+    print(response.statusCode.toString());
+    
+    if ( response.statusCode == 200 ) {
+      if ( cacheImgPath != product.gImgPath) {
+        FireStorageService.deleteImageFromStorage(cacheImgPath);
+      }
     }
   }
 }

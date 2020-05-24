@@ -20,7 +20,7 @@ class AppAlert {
 
   // Método para construir o alert
   buildAlert() {
-    print('>>> dentro da função buildAlert()');
+    print('>>> dentro da função buildAlert');
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -46,26 +46,25 @@ class AppAlert {
   }
 
   buildAlertCreatingProduct() {
-    print('dentro do buildAlertCreatingProduct()');
+    print('>>> dentro da função buildAlertCreatingProduct');
     showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Sistema de Trocas'),
-          content: Text(description),
-          actions: <Widget>[
-            FlatButton(
-              child: Text(buttonText),
-              onPressed: () {
-                if ( status ) {
-                  push(context, HomePage(), replace: true);
-                }
-              },
-            )
-          ],
-        );
-      }
-    );
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Sistema de Trocas'),
+            content: Text(description),
+            actions: <Widget>[
+              FlatButton(
+                child: Text(buttonText),
+                onPressed: () {
+                  if (status) {
+                    push(context, HomePage(), replace: true);
+                  }
+                },
+              )
+            ],
+          );
+        });
   }
 }

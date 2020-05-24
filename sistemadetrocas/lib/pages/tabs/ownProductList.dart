@@ -4,6 +4,8 @@ import 'package:sistemadetrocas/model/product.dart';
 import 'package:sistemadetrocas/pages/product/productForm_page.dart';
 import 'package:sistemadetrocas/requests/products/crudProduct_api.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_button.dart';
+import 'package:sistemadetrocas/utils/composedWidgets/app_confirmOperation.dart';
+import 'package:sistemadetrocas/utils/composedWidgets/app_snackBarMessage.dart';
 import 'package:sistemadetrocas/utils/nav.dart';
 
 class OwnProducts extends StatefulWidget {
@@ -89,12 +91,12 @@ class _OwnProductsState extends State<OwnProducts> {
                 ButtonBar(
                   alignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    AppButton('DETALHES', Colors.blue, 20.0, Colors.white,
-                        _onClickDetail),
-                    AppButton('EXCLUIR', Colors.blue, 20.0, Colors.white,
-                        () {
-                         _shouldDeleteProduct(currentProduct);
-                        })
+                    AppButton('ATUALIZAR', Colors.blue, 20.0, Colors.white, () {
+                      _onClickDetailProduct(currentProduct);
+                    }),
+                    AppButton('EXCLUIR', Colors.blue, 20.0, Colors.white, () {
+                      _onClickDeleteProduct(currentProduct);
+                    })
                   ],
                 ),
               ],
@@ -105,53 +107,27 @@ class _OwnProductsState extends State<OwnProducts> {
     );
   }
 
-  _shouldDeleteProduct(Product product ) async {
+  _onClickDeleteProduct(Product product) async {
     print('>>> Dentro da função _shouldDeleteProduct');
-    final bool shouldDelete = await _onClickDeleteProduct();
-    if ( shouldDelete ) {
+    var appConfirmOperation = AppConfirmOperation(
+      'Deletar',
+      'Confirmar a deleção do produto?',
+      context);
+    final bool shouldDelete = await appConfirmOperation.buildAlertConfirm();
+
+    if (shouldDelete) {
       CrudProduct.deleteProduct(product);
       setState(() {
         this._products.remove(product);
       });
+      var appSnackBarMessage = AppSnackBarMessage(context, 'Produto deletado!', Icons.thumb_up);
+      appSnackBarMessage.buildSnackBarMessage();
     }
-
   }
 
-  _onClickDetail() {
-    print('teste');
+  // chama a tela do formulário do produto, já preenchendo-a com o objeto passado
+  _onClickDetailProduct(Product product) {
+    push(context, CreateProduct(updatedProduct: product, update: true));
   }
 
-  // Constrói o diálogo de alerta e pega a resposta de exclusão do usuário
-  Future<bool> _onClickDeleteProduct() async {
-    print('>>> Dentro da função _onClickDeleteProduct');
-    return showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Excluir'),
-            content: Text('Deseja excluir este item?'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('OK'),
-                onPressed: _confirmedDeleted,
-              ),
-              FlatButton(
-                child: Text('CANCELAR'),
-                onPressed: _cancelledDeleted,
-              )
-            ],
-          );
-        });
-  }
-
-  void _confirmedDeleted() {
-    final bool result = true;
-    Navigator.pop(context, result);
-  }
-
-  void _cancelledDeleted() {
-    final bool result = false;
-    Navigator.pop(context, result);
-  }
 }
