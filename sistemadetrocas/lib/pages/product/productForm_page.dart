@@ -12,7 +12,6 @@ import 'package:sistemadetrocas/utils/composedWidgets/app_alert.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_button.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_confirmOperation.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_formField.dart';
-import 'package:sistemadetrocas/utils/composedWidgets/app_snackBarMessage.dart';
 import 'package:sistemadetrocas/utils/nav.dart';
 import 'package:sistemadetrocas/utils/validation.dart';
 

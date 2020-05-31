@@ -109,4 +109,31 @@ class CrudProduct {
       }
     }
   }
+
+  static Future<List<Product>> getProductByName(String productName) async {
+    String token = await Prefs.getString('token');
+    Map<String,String> headers = {
+      "Content-Type": "application/json",
+      "token": token
+    };
+    var response = await http.get(
+      ServerConfigurations.get_product_by_name+productName, headers: headers
+    );
+    if ( response.statusCode == 404 ) {
+      return List<Product>();
+    }
+    print (response.body);
+    var productsParsed = convert.json.decode(response.body);
+    List<Product> products = _convertVarToTypedList(productsParsed);
+    return products;
+  }
+
+  static List<Product> _convertVarToTypedList(productsParsed) {
+    final List<Product> products = List<Product>();
+    for (dynamic currentProduct in productsParsed ) {
+      Product product = Product.fromJson(currentProduct);
+      products.add(product);
+    }
+    return products;
+  }
 }

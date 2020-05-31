@@ -74,27 +74,34 @@ class _OwnProductsState extends State<OwnProducts> {
             color: Colors.grey[200],
             child: Column(
               children: <Widget>[
-                Image.network(
-                  currentProduct.imagePath,
-                  loadingBuilder: (context, child, progress) {
-                    return progress == null
-                        ? child
-                        : Center(
-                            child: LinearProgressIndicator(
-                                backgroundColor: Colors.blue));
-                  },
+                Container(
+                  height: 250,
+                  child: Image.network(
+                    currentProduct.imagePath,
+                    loadingBuilder: (context, child, progress) {
+                      return progress == null
+                          ? child
+                          : Center(
+                              child: LinearProgressIndicator(
+                                  backgroundColor: Colors.blue));
+                    },
+                  ),
                 ),
                 Text(
                   currentProduct.gName,
-                  style: TextStyle(fontSize: 24),
+                  style: TextStyle(fontSize: 22),
+                ),
+                Text(
+                  currentProduct.gDesc,
+                  style: TextStyle(fontSize: 18),
                 ),
                 ButtonBar(
                   alignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    AppButton('ATUALIZAR', Colors.blue, 20.0, Colors.white, () {
+                    AppButton('ATUALIZAR', Colors.blue, 16.0, Colors.white, () {
                       _onClickDetailProduct(currentProduct);
                     }),
-                    AppButton('EXCLUIR', Colors.blue, 20.0, Colors.white, () {
+                    AppButton('EXCLUIR', Colors.blue, 16.0, Colors.white, () {
                       _onClickDeleteProduct(currentProduct);
                     })
                   ],
