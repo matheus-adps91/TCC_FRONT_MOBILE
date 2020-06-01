@@ -123,8 +123,8 @@ class CrudProduct {
       return List<Product>();
     }
     print (response.body);
-    var productsParsed = convert.json.decode(response.body);
-    List<Product> products = _convertVarToTypedList(productsParsed);
+    var productsDecoded = convert.json.decode(response.body);
+    List<Product> products = _convertVarToTypedList(productsDecoded);
     return products;
   }
 
@@ -134,6 +134,24 @@ class CrudProduct {
       Product product = Product.fromJson(currentProduct);
       products.add(product);
     }
+    return products;
+  }
+
+  static Future<List<Product>> getProductByCategory(String dropdownValue) async {
+    String token = await Prefs.getString('token');
+    Map<String,String> headers = {
+      "Content-Type": "application/json",
+      "token": token
+    };
+    var response = await http.get(
+      ServerConfigurations.get_product_by_category+dropdownValue, headers: headers
+    );
+    if (response.statusCode == 404 ) {
+      return List<Product>();
+    }
+    print(response.body);
+    var productsDecoded = convert.json.decode(response.body);
+    List<Product> products = _convertVarToTypedList(productsDecoded);
     return products;
   }
 }

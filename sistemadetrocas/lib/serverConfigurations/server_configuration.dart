@@ -9,4 +9,5 @@ class ServerConfigurations {
   static const String delete_product_url = url+"product/delete-by-name/";
   static const String update_product_url = url+"product/update-by-name/";
   static const String get_product_by_name = url+"product/get-by-name/";
+  static const String get_product_by_category = url+"product/get-by-category/";
 }

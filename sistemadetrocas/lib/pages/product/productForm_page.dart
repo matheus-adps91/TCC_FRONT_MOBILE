@@ -270,7 +270,7 @@ class _CreateProductState extends State<CreateProduct> {
   }
 
   String _getButtonName() {
-    return isUpdate ? 'ATUALIZAR' : 'CADASTRAR';
+    return isUpdate ? 'Atualizar' : 'Cadastrar';
   }
 
 }

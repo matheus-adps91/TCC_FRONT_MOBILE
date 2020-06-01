@@ -42,10 +42,10 @@ class _OthersProductState extends State<OthersProduct> {
                 ),
               ),
             Divider(height: 5.0, thickness: 3.0),
-            getWidgetToRender(),
+            Center(child: getWidgetToRender()),
             Center(
               child: AppButton(
-                  'PESQUISAR',
+                  'Pesquisar',
                   Colors.white,
                   20.0,
                   Colors.blue,
@@ -82,16 +82,20 @@ class _OthersProductState extends State<OthersProduct> {
       if (_productName == null || _productName.length < 3) {
         return;
       }
-      List<Product> searchedProducts = await CrudProduct.getProductByName(
+      List<Product> searchedProductsByName = await CrudProduct.getProductByName(
           _productName);
       setState(() {
-        this._searchedProducts = searchedProducts;
+        this._searchedProducts = searchedProductsByName;
       });
     } else {
       print(dropdownValue);
       if (!_hasNotEqualDefaultValue(dropdownValue)) {
         return;
       }
+      List<Product> searchedProductsByCategory = await CrudProduct.getProductByCategory(dropdownValue);
+      setState(() {
+        this._searchedProducts = searchedProductsByCategory;
+      });
     }
   }
 
@@ -151,7 +155,7 @@ class _OthersProductState extends State<OthersProduct> {
           ),
           Center(
             child: Text(
-                'Digite pelo menos 3 letras',
+                _getTextActingLikeHint(),
               style: TextStyle(fontSize: 16.0),
             ),
           )
@@ -161,7 +165,8 @@ class _OthersProductState extends State<OthersProduct> {
     if ( _searchedProducts.isEmpty) {
       return Container(
         child: Center(
-          child: Text('LISTA VAZIA'),
+          child: Text('Produto(s) não encontrado(s)',
+          style: TextStyle(fontSize: 22.0),),
         ),
       );
     }
@@ -190,7 +195,7 @@ class _OthersProductState extends State<OthersProduct> {
                   spaceBetweenElements(y:10.0),
                   Center(
                     child: AppButton(
-                      'TROCAR', Colors.blue, 16.0, Colors.white, () {
+                      'Trocar', Colors.blue, 16.0, Colors.white, () {
                         _onClickSendDeal();
                     }
                     ),
@@ -210,5 +215,9 @@ class _OthersProductState extends State<OthersProduct> {
 
   void _onClickSendDeal() {
     print ('>>> Dentro da função _onClickSendDeal');
+  }
+
+  String _getTextActingLikeHint() {
+    return _searchByName ? 'Digite pelo menos 3 letras': 'Selecione uma categoria diferente da padrão';
   }
 }

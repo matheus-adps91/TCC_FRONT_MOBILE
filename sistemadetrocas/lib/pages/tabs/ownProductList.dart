@@ -98,10 +98,10 @@ class _OwnProductsState extends State<OwnProducts> {
                 ButtonBar(
                   alignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    AppButton('ATUALIZAR', Colors.blue, 16.0, Colors.white, () {
+                    AppButton('Atualizar', Colors.blue, 16.0, Colors.white, () {
                       _onClickDetailProduct(currentProduct);
                     }),
-                    AppButton('EXCLUIR', Colors.blue, 16.0, Colors.white, () {
+                    AppButton('Excluir', Colors.blue, 16.0, Colors.white, () {
                       _onClickDeleteProduct(currentProduct);
                     })
                   ],
