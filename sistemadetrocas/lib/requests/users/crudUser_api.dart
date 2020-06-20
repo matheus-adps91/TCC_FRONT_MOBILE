@@ -1,37 +1,16 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+
 import 'package:sistemadetrocas/infrastructure/api_entityResponse.dart';
+import 'package:sistemadetrocas/model/signupUser.dart';
 import 'package:sistemadetrocas/serverConfigurations/server_configuration.dart';
 
-class SignupAPI {
-  static Future<ApiEntityResponse<bool>> signup(
-      String email,
-      String password,
-      String fullName,
-      String gender,
-      String address,
-      String houseNumber,
-      String state,
-      String city,
-      String zipCode,
-      String complement,
-      bool compliance) async {
+class CrudUser {
+  static Future<ApiEntityResponse<bool>> create(SignupUser user) async {
     var headers = {
       "Content-Type": "application/json"
     };
-    Map params = {
-      "email": email,
-      "password": password,
-      "fullName": fullName,
-      "gender": gender,
-      "address": address,
-      "houseNumber": houseNumber,
-      "state": state,
-      "city": city,
-      "zipCode": zipCode,
-      "complement": complement,
-      "compliance": compliance,
-    };
+    var params = user.toJson();
     // Para enviar o cabeçalho em formato JSON, deve converter o MAP para STRING
     String sParams = json.encode(params);
     var response = await http.post(
@@ -47,4 +26,5 @@ class SignupAPI {
     }
     return ApiEntityResponse.fail(false);
   }
+
 }

@@ -102,7 +102,7 @@ class _CreateProductState extends State<CreateProduct> {
               validator: validateEmptyField,
             ),
             spaceBetweenElements(y: 15.0),
-            buildDropdownButton(),
+            Center(child: buildDropdownButton()),
             spaceBetweenElements(y: 30.0),
             AppButton(_getButtonName(), Colors.white, 22, Colors.blue, () {
               _createOrUpdateProduct();

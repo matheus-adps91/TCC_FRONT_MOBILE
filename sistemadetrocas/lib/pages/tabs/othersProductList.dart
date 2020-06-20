@@ -1,12 +1,13 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sistemadetrocas/model/product.dart';
 import 'package:sistemadetrocas/model/productCategory.dart';
+import 'package:sistemadetrocas/requests/preDeals/crudPreDeals_api.dart';
 import 'package:sistemadetrocas/requests/products/crudProduct_api.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_button.dart';
+import 'package:sistemadetrocas/utils/composedWidgets/app_confirmOperation.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_inputText.dart';
+import 'package:sistemadetrocas/utils/composedWidgets/app_snackBarMessage.dart';
 
 class OthersProduct extends StatefulWidget {
 
@@ -15,18 +16,23 @@ class OthersProduct extends StatefulWidget {
 }
 
 class _OthersProductState extends State<OthersProduct> {
+  // Lista dos meus produtos
+  List<Product> _myProducts;
   // Lista de produtos buscado por nome ou por categoria
   List<Product> _searchedProducts;
-
   // variável para controlar a busca ou por nome ou por categoria
   bool _searchByName = true;
-
   // Campo default do dropdownbutton
   String dropdownValue = ProductCategory.Categoria;
-
   // Campo para armazenar o nome do produto
   String _productName;
   TextEditingController _tSearchByName = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProducts();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +61,7 @@ class _OthersProductState extends State<OthersProduct> {
               ),
             ),
             Divider(height: 25.0, thickness: 3.0),
-            BuildSearchedProducts()
+            buildSearchedProducts()
           ],
         ),
       ),
@@ -143,7 +149,7 @@ class _OthersProductState extends State<OthersProduct> {
 
   // Cria a lista de cards com os produtos buscado ou mostra uma mensagem pedindo
   // para fazer a busca, caso ela ainda não tenha sido feita
-  Widget BuildSearchedProducts() {
+  Widget buildSearchedProducts() {
     if (_searchedProducts == null) {
       return Column(
         children: <Widget>[
@@ -196,7 +202,7 @@ class _OthersProductState extends State<OthersProduct> {
                   Center(
                     child: AppButton(
                       'Trocar', Colors.blue, 16.0, Colors.white, () {
-                        _onClickSendDeal();
+                        _onClickMakeDeal(currentSearchedProduct);
                     }
                     ),
                   )
@@ -213,11 +219,75 @@ class _OthersProductState extends State<OthersProduct> {
     return SizedBox(height: y, width: x);
   }
 
-  void _onClickSendDeal() {
+  // Abre o bottomSheet para o usuário escolher seu produto
+  void _onClickMakeDeal(Product currentSearchedProduct) {
     print ('>>> Dentro da função _onClickSendDeal');
+    showModalBottomSheet(context: context, builder: (BuildContext buildContext) {
+      return Container(
+        height: 400,
+        color: Colors.blue,
+        child: Center(
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: _myProducts.length,
+            itemBuilder: (context, index){
+              Product myCurrentProduct = _myProducts[index];
+
+              return Card(
+                color: Colors.grey[200],
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      height: 250,
+                      width: 250,
+                      child: Image.network(myCurrentProduct.gImgPath),
+                    ),
+                    spaceBetweenElements(y:10),
+                    Text(myCurrentProduct.gName, style: TextStyle(fontSize: 22.0),),
+                    spaceBetweenElements(y:10),
+                    Center(
+                      child: AppButton(
+                        'Propor Troca', Colors.white, 16.0, Colors.blue, () {
+                          _onClickSendDeal(myCurrentProduct, currentSearchedProduct);
+                        }
+                      ),
+                    )
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      );
+    });
+  }
+
+  // Busca os meus produtos na API
+  void _loadProducts() async {
+    _myProducts = await CrudProduct.getProducts();
   }
 
   String _getTextActingLikeHint() {
     return _searchByName ? 'Digite pelo menos 3 letras': 'Selecione uma categoria diferente da padrão';
   }
+
+  Future<void> _onClickSendDeal(Product myProduct, Product desiredProduct) async {
+    print('>>> Dentro da função _onClickSendDeal');
+    var appConfirmOperation = AppConfirmOperation(
+      'Propor Troca', 'Confirmar a proposta de troca?', context
+    );
+
+    final bool shouldProposeDeal = await appConfirmOperation.buildAlertConfirm();
+    if (!shouldProposeDeal) {
+      return;
+    }
+    print(myProduct);
+    print(desiredProduct);
+    CrudPreDeal.create(myProduct, desiredProduct);
+
+    var appSnackBarMessage = AppSnackBarMessage(context, 'Proposta enviada', Icons.thumbs_up_down);
+    appSnackBarMessage.buildSnackBarMessage();
+    Navigator.pop(context);
+  }
+
 }

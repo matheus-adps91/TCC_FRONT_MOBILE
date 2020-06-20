@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sistemadetrocas/infrastructure/api_response.dart';
-import 'package:sistemadetrocas/model/usuario.dart';
+import 'package:sistemadetrocas/model/user.dart';
 import 'package:sistemadetrocas/pages/home_page.dart';
 import 'package:sistemadetrocas/pages/signupForm_page.dart';
 import 'package:sistemadetrocas/requests/login_api.dart';
@@ -22,7 +22,7 @@ class LoginPage extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
-        title: Text("Sistema de Trocas"),
+        title: Text("App de Trocas"),
       ),
       body: _body(context),
     );
@@ -74,14 +74,14 @@ class LoginPage extends StatelessWidget {
     ApiResponse apiResponse = await LoginAPI.login(login, senha);
 
     if (apiResponse.userAuthenticated) {
-      Usuario usuarioResp = apiResponse.result;
+      User usuarioResp = apiResponse.result;
       print(">>> $usuarioResp");
-      push(context, HomePage());
+      push(context, HomePage(), replace: true);
     }
   }
 
   _onClickNewAccount(BuildContext context) {
-    push(context, SignupPage());
+    push(context, SignupPage(), replace: true);
   }
 
   _onClickNewPassword() {}

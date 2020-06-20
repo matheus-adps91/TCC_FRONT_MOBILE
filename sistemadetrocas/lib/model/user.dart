@@ -1,9 +1,9 @@
-class Usuario {
+class User {
   String token;
   String email;
   String fullName;
 
-  Usuario(this.token, this.email, this.fullName);
+  User(this.token, this.email, this.fullName);
 
   @override
   String toString() {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sistemadetrocas/infrastructure/api_entityResponse.dart';
-import 'package:sistemadetrocas/requests/signup_api.dart';
+import 'package:sistemadetrocas/model/signupUser.dart';
+import 'package:sistemadetrocas/requests/users/crudUser_api.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_alert.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_button.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_formField.dart';
@@ -190,19 +191,19 @@ class _SignupPageState extends State<SignupPage> {
     // FALTA UM IF AQUI
     Validation.validateConfirmPassword(password, confirmPassword);
 
-    ApiEntityResponse apiResponse = await SignupAPI.signup(
-      email,
-      password,
-      fullName,
-      gender,
-      address,
-      houseNumber,
-      state,
-      city,
-      zipCode,
-      complement,
-      _compliance
-    );
+    SignupUser signupUser = SignupUser(
+        email: email,
+        password: password,
+        fullName: fullName,
+        gender: gender,
+        address: address,
+        houseNumber: houseNumber,
+        state: state,
+        city: city,
+        zipCode: zipCode,
+        complement: complement,
+        compliance: _compliance);
+    ApiEntityResponse apiResponse = await CrudUser.create(signupUser);
 
     AppAlert appAlert = AppAlert(
       apiResponse.actionMsg,
