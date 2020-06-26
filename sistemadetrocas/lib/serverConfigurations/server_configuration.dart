@@ -11,7 +11,7 @@ class ServerConfigurations {
   static const String get_product_by_name = url+"product/get-by-name/";
   static const String get_product_by_category = url+"product/get-by-category/";
   static const String create_deal_url = url+"deal/create";
-  static const String create_pre_deal_url = url+"pre-deal/create";
-  static const String has_pre_deal = url+"pre-deal/has-deal";
-  static const String get_all_my_pre_deal_url = url+"pre-deal/get-all-my-pre-deals";
+  static const String has_pre_deal = url+"deal/has-deal";
+  static const String get_all_product_deal_url = url+"deal/get-all-product-deal";
+  static const String get_products_in_deal_url = url+"product/get-products-in-deal/";
 }

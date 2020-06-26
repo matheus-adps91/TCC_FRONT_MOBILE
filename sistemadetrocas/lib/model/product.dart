@@ -9,7 +9,12 @@ class Product {
    int id;
    SignupUser user;
 
-   Product(this.name, this.description, this.productCategory, this.imagePath, {this.id, this.user});
+   Product(
+       this.name,
+       this.description,
+       this.productCategory,
+       this.imagePath,
+       {this.id, this.user});
 
   String get gName => name;
   String get gDesc => description;
@@ -29,7 +34,7 @@ class Product {
 
    @override
   String toString() {
-    return 'name: '+ gName +' description: ' + gDesc + ' productCategory: ' + gProdCat + ' imagePath: ' + imagePath + ' user: ' + user.toString();
+    return '{name: '+ gName +' description: ' + gDesc + ' productCategory: ' + gProdCat + ' imagePath: ' + imagePath + ' user: ' + user.toString() +' }';
   }
 
 }

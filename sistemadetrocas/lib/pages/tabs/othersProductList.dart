@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sistemadetrocas/model/product.dart';
 import 'package:sistemadetrocas/model/productCategory.dart';
-import 'package:sistemadetrocas/requests/preDeals/crudPreDeals_api.dart';
+import 'package:sistemadetrocas/requests/deals/crudDeals_api.dart';
 import 'package:sistemadetrocas/requests/products/crudProduct_api.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_button.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_confirmOperation.dart';
@@ -177,7 +177,7 @@ class _OthersProductState extends State<OthersProduct> {
       );
     }
     return Container(
-      height: 400,
+        height: 420,
         child:ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: _searchedProducts.length,
@@ -199,6 +199,8 @@ class _OthersProductState extends State<OthersProduct> {
                   spaceBetweenElements(y:10.0),
                   Text(currentSearchedProduct.gDesc, style: TextStyle(fontSize: 18),),
                   spaceBetweenElements(y:10.0),
+                  Text(currentSearchedProduct.gProdCat, style: TextStyle(fontSize: 18),),
+                  spaceBetweenElements(y: 10.0),
                   Center(
                     child: AppButton(
                       'Trocar', Colors.blue, 16.0, Colors.white, () {
@@ -283,7 +285,7 @@ class _OthersProductState extends State<OthersProduct> {
     }
     print(myProduct);
     print(desiredProduct);
-    CrudPreDeal.create(myProduct, desiredProduct);
+    CrudDeal.create(myProduct, desiredProduct);
 
     var appSnackBarMessage = AppSnackBarMessage(context, 'Proposta enviada', Icons.thumbs_up_down);
     appSnackBarMessage.buildSnackBarMessage();

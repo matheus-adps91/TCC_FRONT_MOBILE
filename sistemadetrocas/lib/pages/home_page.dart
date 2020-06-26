@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sistemadetrocas/pages/deals/proposedDeals_form.dart';
 import 'package:sistemadetrocas/pages/tabs/ownProductList.dart';
 import 'package:sistemadetrocas/pages/tabs/othersProductList.dart';
 import 'package:sistemadetrocas/pages/tabs/dealsList.dart';
-import 'package:sistemadetrocas/requests/preDeals/crudPreDeals_api.dart';
+import 'package:sistemadetrocas/requests/deals/crudDeals_api.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_drawer.dart';
 
 class HomePage extends StatefulWidget
@@ -20,12 +22,13 @@ class _HomePageState extends State<HomePage>
 {
   Timer _timer;
   bool _hasDeal = false;
+  bool _hasToStopTimer = false;
   TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 3,);
+    _tabController = TabController(vsync: this, length: 3);
     startTimer();
   }
 
@@ -39,9 +42,9 @@ class _HomePageState extends State<HomePage>
         actions: <Widget>[
           Center(
             child: AnimatedCrossFade(
-              firstChild: IconButton( icon: Icon(Icons.notifications_none, size: 32,), onPressed: _getOldDeals,),
-              secondChild: IconButton( icon: Icon(Icons.notifications_active, size: 32,), onPressed: _getNewDeals,),
-              duration: Duration(milliseconds: 2000),
+              firstChild: IconButton( icon: Icon(Icons.notifications_none, size: 32), onPressed: _getProposedDeals,),
+              secondChild: IconButton( icon: Icon(Icons.notifications_active, size: 32), onPressed: _getProposedDeals,),
+              duration: Duration(seconds: 2),
               crossFadeState: _hasDeal ? CrossFadeState.showSecond: CrossFadeState.showFirst,
             ),
           )
@@ -72,34 +75,40 @@ class _HomePageState extends State<HomePage>
 
   @override
   void dispose() {
-    // cancel o contador
+    // cancela o contador
     _timer.cancel();
     _tabController.dispose();
     super.dispose();
   }
 
-  // Busca as proposta de troca para este usuário
-  void _getProposedDeals(bool hasDeal) {
+  // Atualiza a tela quando há propostas
+  void _updateProposedDeals(bool hasDeal) {
     setState(() {
       _hasDeal = hasDeal;
     });
   }
 
   // Inicializa o contador
+  // Busca as proposta de troca para este usuário
   void startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 60),
+    _timer = Timer.periodic(Duration(seconds: 10),
         (timer) {
-          Future<bool> futureHasDeal = CrudPreDeal.hasDeal();
-          futureHasDeal.then( (hasDeal) => hasDeal ? _getProposedDeals(hasDeal) : print('não há propostas até o momento'));
+          if (!_hasToStopTimer ) {
+            Future<bool> futureHasDeal = CrudDeal.hasDeal();
+            futureHasDeal.then( (hasDeal) => hasDeal ? _updateProposedDeals(hasDeal) : print('não há propostas até o momento'));
+          }
         } );
   }
 
-  void _getOldDeals() {
-    print('Este método vai recuperar os delas antigos');
+  void _getProposedDeals() {
+    print('>>> dentro da função _getProposedDeals');
+    _hasToStopTimer = true;
+    Navigator.push(context, MaterialPageRoute(builder: (context) => ProposedPage())).then((value) {
+      _hasToStopTimer = value;
+    });
+    _updateProposedDeals(false);
   }
 
-  void _getNewDeals() {
-    print('Este método vai recuperar os deals novos');
-    _getProposedDeals(false);
-  }
 }
+
+

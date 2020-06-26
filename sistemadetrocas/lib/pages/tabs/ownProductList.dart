@@ -8,14 +8,16 @@ import 'package:sistemadetrocas/utils/composedWidgets/app_confirmOperation.dart'
 import 'package:sistemadetrocas/utils/composedWidgets/app_snackBarMessage.dart';
 import 'package:sistemadetrocas/utils/nav.dart';
 
-class OwnProducts extends StatefulWidget {
+class OwnProducts extends StatefulWidget
+{
   Product product;
 
   @override
   _OwnProductsState createState() => _OwnProductsState();
 }
 
-class _OwnProductsState extends State<OwnProducts> {
+class _OwnProductsState extends State<OwnProducts>
+{
   List<Product> _products;
 
   @override
@@ -24,6 +26,7 @@ class _OwnProductsState extends State<OwnProducts> {
     _loadProducts();
   }
 
+  // Busca os products na API
   _loadProducts() async {
     List<Product> products = await CrudProduct.getProducts();
     setState(() {
@@ -44,7 +47,7 @@ class _OwnProductsState extends State<OwnProducts> {
     );
   }
 
-  _body() {
+  Widget _body() {
     if (_products == null) {
       return Container(
         child: Center(
@@ -76,6 +79,7 @@ class _OwnProductsState extends State<OwnProducts> {
               children: <Widget>[
                 Container(
                   height: 250,
+                  width: 250,
                   child: Image.network(
                     currentProduct.imagePath,
                     loadingBuilder: (context, child, progress) {
@@ -91,10 +95,17 @@ class _OwnProductsState extends State<OwnProducts> {
                   currentProduct.gName,
                   style: TextStyle(fontSize: 22),
                 ),
+                spaceBetweenElements(y: 10.0),
                 Text(
                   currentProduct.gDesc,
                   style: TextStyle(fontSize: 18),
                 ),
+                spaceBetweenElements(y: 10.0),
+                Text(
+                  currentProduct.gProdCat,
+                  style: TextStyle(fontSize: 18),
+                ),
+                spaceBetweenElements(y: 10.0),
                 ButtonBar(
                   alignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -135,6 +146,11 @@ class _OwnProductsState extends State<OwnProducts> {
   // chama a tela do formulário do produto, já preenchendo-a com o objeto passado
   _onClickDetailProduct(Product product) {
     push(context, CreateProduct(updatedProduct: product, update: true));
+  }
+
+  // Espaço entre elementos do ListView do formulário de SignUp
+  SizedBox spaceBetweenElements({double y = 0, double x = 0}) {
+    return SizedBox(height: y, width: x);
   }
 
 }

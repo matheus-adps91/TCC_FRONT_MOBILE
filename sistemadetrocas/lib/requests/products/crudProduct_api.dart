@@ -128,15 +128,6 @@ class CrudProduct {
     return products;
   }
 
-  static List<Product> _convertVarToTypedList(productsParsed) {
-    final List<Product> products = List<Product>();
-    for (dynamic currentProduct in productsParsed ) {
-      Product product = Product.fromJson(currentProduct);
-      products.add(product);
-    }
-    return products;
-  }
-
   static Future<List<Product>> getProductByCategory(String dropdownValue) async {
     String token = await Prefs.getString('token');
     Map<String,String> headers = {
@@ -152,6 +143,15 @@ class CrudProduct {
     print(response.body);
     var productsDecoded = convert.json.decode(response.body);
     List<Product> products = _convertVarToTypedList(productsDecoded);
+    return products;
+  }
+
+  static List<Product> _convertVarToTypedList(productsParsed) {
+    final List<Product> products = List<Product>();
+    for (dynamic currentProduct in productsParsed ) {
+      Product product = Product.fromJson(currentProduct);
+      products.add(product);
+    }
     return products;
   }
 }
