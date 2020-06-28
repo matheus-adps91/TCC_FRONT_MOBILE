@@ -128,9 +128,7 @@ class _OwnProductsState extends State<OwnProducts>
   _onClickDeleteProduct(Product product) async {
     print('>>> Dentro da função _shouldDeleteProduct');
     var appConfirmOperation = AppConfirmOperation(
-      'Deletar',
-      'Confirmar a deleção do produto?',
-      context);
+      'Deletar', 'Confirmar a deleção do produto?', context);
     final bool shouldDelete = await appConfirmOperation.buildAlertConfirm();
 
     if (shouldDelete) {

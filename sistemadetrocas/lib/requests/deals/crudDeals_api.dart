@@ -8,7 +8,7 @@ import 'package:sistemadetrocas/utils/prefs.dart';
 
 class CrudDeal {
 
-  static Future<void> create(Product myProduct, Product desiredProduct) async {
+  static Future<bool> create(Product myProduct, Product desiredProduct) async {
     String token = await Prefs.getString('token');
     Map<String, String> headers = {
       "Content-Type": "application/json",
@@ -41,6 +41,10 @@ class CrudDeal {
 
     print(response.headers.toString());
     print(response.statusCode.toString());
+    if (response.statusCode == 201) {
+      return true;
+    }
+    return false;
   }
 
   static Future<bool> hasDeal() async {
@@ -76,6 +80,25 @@ class CrudDeal {
     var productDealsDecoded = convert.json.decode(response.body);
     List<ProductDeal> productDeals = _convertVarToTypedList(productDealsDecoded);
     return productDeals;
+  }
+
+  static Future<bool> deleteProposedDeal(ProductDeal productDeal) async {
+    print('>>> Dentro da função deleteProposedDeal');
+    print(productDeal);
+    String token = await Prefs.getString('token');
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "token": token
+    };
+
+    var response = await http.delete(
+      ServerConfigurations.update_reject_proposed_deal+productDeal.gIdDeal.toString(), headers: headers);
+
+    print(response.statusCode);
+    if(response.statusCode == 200) {
+      return true;
+    }
+    return false;
   }
 
   static List<ProductDeal> _convertVarToTypedList(productDealsDecoded) {

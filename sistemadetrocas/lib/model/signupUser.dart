@@ -73,4 +73,12 @@ class SignupUser {
     data['compliance'] = this.compliance;
     return data;
   }
+
+  @override
+  String toString() {
+    return "{id: "+ gUserId.toString() +" email: "+ gEmail +" fullName: "+ gFullName
+      +" gender: "+ gender +" address: "+ gAddress +" houseNumber: " +gHouseNumber
+      +" state: "+ gState +" city: "+ gCity +" zipCode: "+ gZipCode
+      +" complement: "+ gComplement +" compliance: "+ gCompliance.toString()+ " }";
+  }
 }

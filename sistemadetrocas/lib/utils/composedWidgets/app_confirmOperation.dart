@@ -25,7 +25,7 @@ class AppConfirmOperation {
             content: Text(content),
             actions: <Widget>[
               FlatButton(
-                child: Text('OK'),
+                child: Text('SIM'),
                 onPressed: _confirmedOperation,
               ),
               FlatButton(

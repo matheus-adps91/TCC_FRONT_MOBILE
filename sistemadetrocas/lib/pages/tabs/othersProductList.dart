@@ -285,11 +285,19 @@ class _OthersProductState extends State<OthersProduct> {
     }
     print(myProduct);
     print(desiredProduct);
-    CrudDeal.create(myProduct, desiredProduct);
+    var answered = await CrudDeal.create(myProduct, desiredProduct);
 
-    var appSnackBarMessage = AppSnackBarMessage(context, 'Proposta enviada', Icons.thumbs_up_down);
-    appSnackBarMessage.buildSnackBarMessage();
-    Navigator.pop(context);
+    if (!answered) {
+      var appSnackBarMessage = AppSnackBarMessage(context, 'Proposta repetida', Icons.error_outline, backgroundColor: Colors.red);
+      appSnackBarMessage.buildSnackBarMessage();
+      Navigator.pop(context);
+    } else {
+      var appSnackBarMessage = AppSnackBarMessage(context, 'Proposta enviada', Icons.thumbs_up_down);
+      appSnackBarMessage.buildSnackBarMessage();
+      Navigator.pop(context);
+    }
+
+
   }
 
 }

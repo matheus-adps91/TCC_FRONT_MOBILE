@@ -6,15 +6,15 @@ import 'package:sistemadetrocas/model/ProductDeal.dart';
 import 'package:sistemadetrocas/model/product.dart';
 import 'package:sistemadetrocas/requests/deals/crudDeals_api.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_button.dart';
+import 'package:sistemadetrocas/utils/composedWidgets/app_confirmOperation.dart';
+import 'package:sistemadetrocas/utils/composedWidgets/app_snackBarMessage.dart';
 
-class ProposedPage extends StatefulWidget
-{
+class ProposedPage extends StatefulWidget {
   @override
   _ProposedPageState createState() => _ProposedPageState();
 }
 
-class _ProposedPageState extends State<ProposedPage>
-{
+class _ProposedPageState extends State<ProposedPage> {
   Timer _timer;
   bool _alternateProduct = false;
   List<ProductDeal> _productDeals;
@@ -28,7 +28,7 @@ class _ProposedPageState extends State<ProposedPage>
 
   // Busca as preDeals na API
   void _loadProductDeals() async {
-      List<ProductDeal> productDeals = await CrudDeal.getDeal();
+    List<ProductDeal> productDeals = await CrudDeal.getDeal();
     setState(() {
       this._productDeals = productDeals;
     });
@@ -72,28 +72,41 @@ class _ProposedPageState extends State<ProposedPage>
 
     return Container(
       padding: EdgeInsets.all(16),
-        child: ListView.builder(
+      child: ListView.builder(
           itemCount: _productDeals.length,
-          itemBuilder: (context,index) {
+          itemBuilder: (context, index) {
             ProductDeal currentProductDeal = _productDeals[index];
 
             return Card(
               color: Colors.grey[200],
               child: Column(
                 children: <Widget>[
-                  Container(
-                    child: AnimatedCrossFade(
-                      firstChild: _wireOfProposedDeal(currentProductDeal.gProductProponent),
-                      secondChild: _wireOfProposedDeal(currentProductDeal.gProductProposed),
-                      duration: Duration(seconds: 2),
-                      crossFadeState: _alternateProduct ? CrossFadeState.showFirst: CrossFadeState.showSecond,
+                   Container(
+                      child: AnimatedCrossFade(
+                        firstChild: _wireOfProposedDeal(currentProductDeal.gProductProponent),
+                        secondChild: _wireOfProposedDeal(currentProductDeal.gProductProposed),
+                        duration: Duration(seconds: 2),
+                        crossFadeState: _alternateProduct
+                            ? CrossFadeState.showFirst: CrossFadeState.showSecond,
+                      ),
                     ),
-                  )
-                ],
-              ),
-            );
-          }),
-      );
+                    spaceBetweenElements(y: 10.0),
+                    ButtonBar(
+                      alignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        AppButton('Aceitar', Colors.blue, 16.0, Colors.white, () {
+                            _onClickAcceptDeal();
+                          }),
+                        AppButton('Recusar', Colors.blue, 16.0, Colors.white, () {
+                            _onClickRejectDeal(currentProductDeal);
+                          })
+                        ],
+                    )]
+                )
+          );
+          }
+      )
+    );
   }
 
   void startTimer() {
@@ -103,7 +116,7 @@ class _ProposedPageState extends State<ProposedPage>
   }
 
   // Mudo o valor da flag para a troca de produto
-  void _alternateProductsInDeal( ) {
+  void _alternateProductsInDeal() {
     setState(() {
       _alternateProduct = !_alternateProduct;
     });
@@ -116,7 +129,7 @@ class _ProposedPageState extends State<ProposedPage>
     _timer.cancel();
   }
 
-  Widget _wireOfProposedDeal(Product product){
+  Widget _wireOfProposedDeal(Product product) {
     return Column(
       children: <Widget>[
         Container(
@@ -139,18 +152,6 @@ class _ProposedPageState extends State<ProposedPage>
         Text(
           product.gProdCat,
           style: TextStyle(fontSize: 18),
-        ),
-        spaceBetweenElements(y: 10.0),
-        ButtonBar(
-          alignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            AppButton('Aceitar', Colors.blue, 16.0, Colors.white, () {
-              _onClickAcceptDeal();
-            }),
-            AppButton('Recusar', Colors.blue, 16.0, Colors.white, () {
-              _onClickRejectDeal();
-            })
-          ],
         )
       ],
     );
@@ -165,8 +166,22 @@ class _ProposedPageState extends State<ProposedPage>
     print(">>> dentro do método _onClickAcceptDeal");
   }
 
-  void _onClickRejectDeal() {
+  Future<void> _onClickRejectDeal(ProductDeal productDeal) async {
     print(">>> dentro do método _onClickReject");
+    var appConfirmOpearation = AppConfirmOperation(
+        'Proposta', 'Recusar a proposta de troca?', context
+    );
+
+    final bool shoulDelete = await appConfirmOpearation.buildAlertConfirm();
+    if (!shoulDelete) {
+      return;
+    }
+    final bool answeredProposedDeal = await CrudDeal.deleteProposedDeal(productDeal);
+    if ( answeredProposedDeal) {
+      setState(() {
+        _productDeals.remove(productDeal);
+      });
+    }
   }
 
 }
