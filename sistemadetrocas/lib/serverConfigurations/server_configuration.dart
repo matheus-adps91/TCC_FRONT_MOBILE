@@ -1,6 +1,6 @@
 class ServerConfigurations {
 
-  static const String url = "http://192.168.0.139:12345/";
+  static const String url = "http://192.168.0.138:12345/";
   static const String create_user_url = url+"user/create";
   static const String login_url = url+"auth/login";
   static const String logout_url = url+"auth/logout";
@@ -15,4 +15,5 @@ class ServerConfigurations {
   static const String get_all_product_deal_url = url+"deal/get-all-product-deal";
   static const String get_products_in_deal_url = url+"product/get-products-in-deal/";
   static const String update_reject_proposed_deal = url+"deal/delete-proposed-deal-by-id/";
+  static const String update_accept_proposed_deal = url+"deal/accept-proposed-deal";
 }

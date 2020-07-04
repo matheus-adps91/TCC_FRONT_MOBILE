@@ -19,6 +19,7 @@ class CrudProduct {
       'name': product.gName,
       'description': product.gDesc,
       'productCategory': product.gProdCat,
+      'dealing' : product.gDealing,
       'imagePath': product.gImgPath
     };
     // Para enviar o cabeçalho em formato JSON, deve converter o MAP para STRING

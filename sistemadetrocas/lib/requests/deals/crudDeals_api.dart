@@ -82,6 +82,51 @@ class CrudDeal {
     return productDeals;
   }
 
+  static Future<bool> acceptedProposedDeal(ProductDeal productDeal) async {
+    print(">>> dentro da função acceptedProposedDeal");
+    String token = await Prefs.getString('token');
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "token": token
+    };
+    print(productDeal);
+    Product myProduct = productDeal.gProductProponent;
+    Product desiredProduct = productDeal.gProductProposed;
+    Map params = {
+      "productProponent": {
+        "id" : myProduct.gProductId,
+        "name" : myProduct.gName,
+        "description" : myProduct.gDesc,
+        "productCategory" : myProduct.gProdCat,
+        "user": myProduct.gSignupUser,
+        "imagePath": myProduct.gImgPath
+      },
+      "dealStatusUserProponent":"Troca em andamento",
+      "productProposed": {
+        "id" : desiredProduct.gProductId,
+        "name" : desiredProduct.gName,
+        "description" : desiredProduct.gDesc,
+        "productCategory" : desiredProduct.gProdCat,
+        "user": desiredProduct.gSignupUser,
+        "imagePath": desiredProduct.gImgPath,
+      },
+      "dealStatusUserProposed":"Troca em andamento",
+      "idDeal": productDeal.gIdDeal,
+      "id": productDeal.gId
+    };
+    String sParams = convert.json.encode(params);
+    var response = await http.patch(
+        ServerConfigurations.update_accept_proposed_deal, headers: headers, body: sParams);
+
+    if ( response.statusCode == 200) {
+      print ('Atualizado com sucesso');
+      return true;
+    } else {
+      print ('Falha na atualização');
+      return false;
+    }
+  }
+
   static Future<bool> deleteProposedDeal(ProductDeal productDeal) async {
     print('>>> Dentro da função deleteProposedDeal');
     print(productDeal);

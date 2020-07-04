@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:sistemadetrocas/model/ProductDeal.dart';
 import 'package:sistemadetrocas/model/product.dart';
 import 'package:sistemadetrocas/requests/deals/crudDeals_api.dart';
+import 'package:sistemadetrocas/serverConfigurations/server_configuration.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_button.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_confirmOperation.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_snackBarMessage.dart';
@@ -46,11 +47,15 @@ class _ProposedPageState extends State<ProposedPage> {
           onPressed: () => Navigator.pop(context, false),
         ),
       ),
-      body: _body(),
+      body: Builder (
+        builder: (BuildContext context) {
+          return _body(context);
+        },
+      ),
     );
   }
 
-  Widget _body() {
+  Widget _body(BuildContext context) {
     if (_productDeals == null) {
       return Container(
         child: Center(
@@ -81,6 +86,17 @@ class _ProposedPageState extends State<ProposedPage> {
               color: Colors.grey[200],
               child: Column(
                 children: <Widget>[
+                  ListTile(
+                    trailing: Icon(Icons.compare_arrows),
+                    title: Text(
+                        currentProductDeal.gProductProponent.gSignupUser.gFullName,
+                        style: TextStyle(fontSize: 22.0),
+                    ),
+                    subtitle: Text(
+                      'Propõe a troca:',
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                  ),
                    Container(
                       child: AnimatedCrossFade(
                         firstChild: _wireOfProposedDeal(currentProductDeal.gProductProponent),
@@ -95,10 +111,10 @@ class _ProposedPageState extends State<ProposedPage> {
                       alignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         AppButton('Aceitar', Colors.blue, 16.0, Colors.white, () {
-                            _onClickAcceptDeal();
+                            _onClickAcceptDeal(currentProductDeal, context);
                           }),
                         AppButton('Recusar', Colors.blue, 16.0, Colors.white, () {
-                            _onClickRejectDeal(currentProductDeal);
+                            _onClickRejectDeal(currentProductDeal, context);
                           })
                         ],
                     )]
@@ -162,18 +178,37 @@ class _ProposedPageState extends State<ProposedPage> {
     return SizedBox(height: y, width: x);
   }
 
-  void _onClickAcceptDeal() {
+  Future<void> _onClickAcceptDeal(ProductDeal productDeal, BuildContext context) async {
     print(">>> dentro do método _onClickAcceptDeal");
+    var appConfirmOpearation = AppConfirmOperation(
+        'Proposta', 'Aceitar a proposta de troca?', context
+    );
+    final bool shouldAccept  = await appConfirmOpearation.buildAlertConfirm();
+    if(!shouldAccept) {
+      return;
+    }
+    bool isSuccessfullAccepted = await CrudDeal.acceptedProposedDeal(productDeal);
+
+    if(isSuccessfullAccepted) {
+      var appSnackBarMessage =
+      AppSnackBarMessage(context, 'Proposta aceita com sucesso', Icons.sync);
+      appSnackBarMessage.buildSnackBarMessage();
+      _loadProductDeals();
+    } else {
+      var appSnackBarMessage = AppSnackBarMessage(context, 'Falha no processo de Troca', Icons.sync_problem, backgroundColor: Colors.red);
+      appSnackBarMessage.buildSnackBarMessage();
+    }
+
   }
 
-  Future<void> _onClickRejectDeal(ProductDeal productDeal) async {
+  Future<void> _onClickRejectDeal(ProductDeal productDeal, BuildContext context) async {
     print(">>> dentro do método _onClickReject");
     var appConfirmOpearation = AppConfirmOperation(
         'Proposta', 'Recusar a proposta de troca?', context
     );
 
-    final bool shoulDelete = await appConfirmOpearation.buildAlertConfirm();
-    if (!shoulDelete) {
+    final bool shouldDelete = await appConfirmOpearation.buildAlertConfirm();
+    if (!shouldDelete) {
       return;
     }
     final bool answeredProposedDeal = await CrudDeal.deleteProposedDeal(productDeal);
@@ -181,6 +216,8 @@ class _ProposedPageState extends State<ProposedPage> {
       setState(() {
         _productDeals.remove(productDeal);
       });
+      var appSnackBarMessage = AppSnackBarMessage(context, 'Proposta recusada com sucesso', Icons.sync_disabled);
+      appSnackBarMessage.buildSnackBarMessage();
     }
   }
 

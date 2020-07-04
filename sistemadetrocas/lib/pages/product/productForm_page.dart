@@ -182,7 +182,7 @@ class _CreateProductState extends State<CreateProduct> {
     final String productCategory = dropdownValue.toString();
     final String imagePath = _imagePathFromStorage;
 
-    final Product product = Product(name, description, productCategory, imagePath);
+    final Product product = Product(name, description, productCategory, false, imagePath);
 
     ApiEntityResponse apiResponse = await CrudProduct.create(product);
 
@@ -226,7 +226,7 @@ class _CreateProductState extends State<CreateProduct> {
     final String name = tProductName.text;
     final String description = tDescription.text;
     final String productCategory = dropdownValue.toString();
-    final Product product = Product(name, description, productCategory, _imagePathFromStorage);
+    final Product product = Product(name, description, productCategory, false, _imagePathFromStorage);
 
     CrudProduct.updateProduct(product, _cacheProductName, _cacheImgPath);
     push(context, HomePage(), replace: true);
