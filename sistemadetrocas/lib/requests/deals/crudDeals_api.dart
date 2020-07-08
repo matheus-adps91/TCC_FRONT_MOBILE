@@ -1,6 +1,7 @@
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:sistemadetrocas/model/ProductDeal.dart';
+import 'package:sistemadetrocas/model/deal.dart';
 
 import 'package:sistemadetrocas/model/product.dart';
 import 'package:sistemadetrocas/serverConfigurations/server_configuration.dart';
@@ -63,7 +64,7 @@ class CrudDeal {
     return false;
   }
 
-  static Future<List<ProductDeal>> getDeal() async {
+  static Future<List<ProductDeal>> getProductDeal() async {
     String token = await Prefs.getString('token');
     Map<String, String> headers = {
       "Content-Type": "application/json",
@@ -146,6 +147,64 @@ class CrudDeal {
     return false;
   }
 
+  static Future<List<ProductDeal>> getProductsDealsToShowOnPanel() async {
+    print('>>> dentro da função getProductsDealsToShowOnPanel');
+    String token = await Prefs.getString('token');
+    Map<String,String> headers = {
+      "Content-Type": "application/json",
+      "token": token
+    };
+
+    var response = await http.get(
+      ServerConfigurations.get_products_deals_show_panel, headers: headers
+    );
+
+    print(response.statusCode);
+    if (response.statusCode == 404) {
+      return List<ProductDeal>();
+    }
+    print(response.body);
+    var productDealsDecoded = convert.json.decode(response.body);
+    List<ProductDeal> productDeals = _convertVarToTypedList(productDealsDecoded);
+    return productDeals;
+  }
+
+  static Future<void> updateStepper(int idProductDeal) async {
+    print('>>> dentro da função updateStepper');
+    String token = await Prefs.getString('token');
+    print('>>> dentro da função getProductsDealsToShowOnPanel');
+    Map<String,String> headers = {
+      "Content-Type": "application/json",
+      "token": token
+    };
+    Map params = {
+      "idProductDeal": idProductDeal
+    };
+    String sParams = convert.json.encode(params);
+    var response = await http.patch(
+      ServerConfigurations.update_stepper_deal, headers: headers, body: sParams
+    );
+
+    print(response.statusCode);
+  }
+
+  static Future<List<Deal>> getDealsToShowOnPanel() async {
+    print('>>> dentro da função getDealsToShowOnPanel');
+    String token = await Prefs.getString('token');
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "token": token
+    };
+    var response = await http.get(
+      ServerConfigurations.get_deals_show_panel, headers: headers
+    );
+
+    print(response.statusCode);
+    dynamic decodedDeals = convert.json.decode(response.body);
+    List<Deal> deals = _convertVarToDealList(decodedDeals);
+    return deals;
+  }
+
   static List<ProductDeal> _convertVarToTypedList(productDealsDecoded) {
     final List<ProductDeal> preDeals = List<ProductDeal>();
     for (dynamic currentPreDeal in productDealsDecoded ) {
@@ -153,5 +212,14 @@ class CrudDeal {
       preDeals.add(preDeal);
     }
     return preDeals;
+  }
+
+  static List<Deal> _convertVarToDealList(dealsDecoded) {
+    final List<Deal> deals = List<Deal>();
+    for ( dynamic currentDeal in dealsDecoded) {
+      Deal deal = Deal.fromJson(currentDeal);
+      deals.add(deal);
+    }
+    return deals;
   }
 }

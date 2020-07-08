@@ -101,7 +101,6 @@ class CrudProduct {
     var response = await http.put(
       ServerConfigurations.update_product_url+cacheProductName, headers: headers, body: sParams
     );
-    print(response.headers.toString());
     print(response.statusCode.toString());
     
     if ( response.statusCode == 200 ) {

@@ -1,7 +1,7 @@
 import 'package:sistemadetrocas/model/product.dart';
 
-class ProductDeal {
-
+class ProductDeal
+{
   Product productProponent;
   Product productProposed;
   int idDeal;
@@ -29,5 +29,4 @@ class ProductDeal {
   String toString() {
     return '{id: '+ gId.toString() +' productProponent:  '+ gProductProponent.toString();
   }
-
 }

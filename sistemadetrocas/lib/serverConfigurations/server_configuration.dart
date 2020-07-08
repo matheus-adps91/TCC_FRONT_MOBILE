@@ -16,4 +16,7 @@ class ServerConfigurations {
   static const String get_products_in_deal_url = url+"product/get-products-in-deal/";
   static const String update_reject_proposed_deal = url+"deal/delete-proposed-deal-by-id/";
   static const String update_accept_proposed_deal = url+"deal/accept-proposed-deal";
+  static const String get_products_deals_show_panel = url+"deal/get-products-deals-to-show-panel";
+  static const String update_stepper_deal = url+"deal/update-stepper-deal";
+  static const String get_deals_show_panel = url+"deal/get-deals-to-show-panel";
 }

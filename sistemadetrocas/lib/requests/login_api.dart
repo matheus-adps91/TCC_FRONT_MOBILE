@@ -24,8 +24,10 @@ class LoginAPI {
       String token = mapResponse['token'];
       String email = mapResponse['email'];
       String fullName = mapResponse['fullName'];
-      User usuario = User(token, email, fullName);
-      Prefs.setString('token', token);
+      int id = mapResponse['id'];
+      User usuario = User(token, email, fullName, id);
+      Prefs.setString('token', usuario.token);
+      Prefs.setString('id', usuario.id.toString());
       return ApiResponse.authenticated(usuario);
     }
     return ApiResponse.notAuthenticated("Usuário não autenticado");

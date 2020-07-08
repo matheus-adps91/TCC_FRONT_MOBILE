@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:sistemadetrocas/model/ProductDeal.dart';
 import 'package:sistemadetrocas/model/product.dart';
 import 'package:sistemadetrocas/requests/deals/crudDeals_api.dart';
-import 'package:sistemadetrocas/serverConfigurations/server_configuration.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_button.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_confirmOperation.dart';
 import 'package:sistemadetrocas/utils/composedWidgets/app_snackBarMessage.dart';
@@ -29,7 +28,7 @@ class _ProposedPageState extends State<ProposedPage> {
 
   // Busca as preDeals na API
   void _loadProductDeals() async {
-    List<ProductDeal> productDeals = await CrudDeal.getDeal();
+    List<ProductDeal> productDeals = await CrudDeal.getProductDeal();
     setState(() {
       this._productDeals = productDeals;
     });

@@ -213,7 +213,7 @@ class _CreateProductState extends State<CreateProduct> {
       return;
     }
 
-    // Se o nome de _photFile for diferente de _cachePhotoName
+    // Se o nome de _photoFile for diferente de _cachePhotoName
     // Fazer o upload da nova foto e deletar a velha
     if ( _photoFile != null && _cacheImgPath != _photoFile.path ) {
       print ('foto atualizada');
@@ -228,7 +228,7 @@ class _CreateProductState extends State<CreateProduct> {
     final String productCategory = dropdownValue.toString();
     final Product product = Product(name, description, productCategory, false, _imagePathFromStorage);
 
-    CrudProduct.updateProduct(product, _cacheProductName, _cacheImgPath);
+    await CrudProduct.updateProduct(product, _cacheProductName, _cacheImgPath);
     push(context, HomePage(), replace: true);
   }
 
