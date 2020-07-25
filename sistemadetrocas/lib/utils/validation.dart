@@ -6,7 +6,7 @@ class Validation {
   static String defaultValidation(String value) {
     print('>>> FUNÇÃO: defaultValidation');
     if (value.isEmpty) {
-      return "VALIDAÇÃO TESTE";
+      return "Campo Obrigatório";
     }
     return null;
   }

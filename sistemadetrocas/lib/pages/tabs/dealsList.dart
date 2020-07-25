@@ -21,8 +21,6 @@ class _DealsState extends State<Deals>
   List<Deal> _deals;
   // Id do usuário logado
   int idCurrentUser;
-  // Armazena o valor do steper
-  int _currentStep;
 
   @override
   void initState() {
